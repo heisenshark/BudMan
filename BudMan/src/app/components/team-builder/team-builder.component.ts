@@ -13,6 +13,7 @@ export class TeamBuilderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
   newMemberName: string = ""
   members: string[] = []
   errorMessage: string = ""
@@ -37,6 +38,12 @@ export class TeamBuilderComponent implements OnInit {
   }
 
   generateTeams() {
+    const getRandomInt = (min: number, max: number) => {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
     if (this.teamsNumber > this.members.length) {
       this.errorMessage = 'Add more members to generate teams'
       return
@@ -46,36 +53,19 @@ export class TeamBuilderComponent implements OnInit {
       return
     }
 
-    this.outputTeams = [];
+    this.outputTeams = []
     let arrcopy = [...this.members]
-    this.fisherYatesShuffle(arrcopy)
+
+    for (let i = 0; i < this.teamsNumber; i++)
+      this.outputTeams.push([])
     let i = 0
-    let chunkSize = 0
-    if (this.eqR) {
-      chunkSize = Math.floor(arrcopy.length / this.teamsNumber)
-
-      let leftout = this.members.length - chunkSize * this.teamsNumber + chunkSize
-      if (leftout != chunkSize) {
-        console.log(`dupa`)
-        this.outputTeams.push(arrcopy.slice(0, leftout))
-        i = leftout;
-      }
-    } else {
-      chunkSize = Math.ceil(arrcopy.length / this.teamsNumber)
-
+    while (i < this.members.length && arrcopy.length > 0 && i < 30) {
+      this.outputTeams[i % this.teamsNumber].push(arrcopy.splice(getRandomInt(0, arrcopy.length - 1), 1)[0])
+      console.log([arrcopy.length, i])
+      ++i
     }
-    for (; i < arrcopy.length; i += chunkSize) {
-      let xd = arrcopy.slice(i, i + chunkSize)
-      this.outputTeams.push(xd)
-    }
+
     console.log(this.outputTeams)
-  }
-
-  fisherYatesShuffle(arr: string[]) {
-    for (var i = arr.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1)); //random index
-      [arr[i], arr[j]] = [arr[j], arr[i]]; // swap
-    }
   }
 
   onNumberInput(value: string) {

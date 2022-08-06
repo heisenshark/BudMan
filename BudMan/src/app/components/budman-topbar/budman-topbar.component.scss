@@ -1,0 +1,68 @@
+.topbar {
+  display: flex;
+  height: 8vh;
+  background: #CDC59D;
+  margin: 0;
+  padding: 0;
+  border-bottom: 10px solid rgba(56, 53, 35, 0.35);
+  .home-button {
+    position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+      display: flex;
+    }
+
+    svg {
+      display: flex;
+    }
+  }
+
+  .right-side {
+    position: absolute;
+    display: flex;
+    right: 0;
+    height: inherit;
+    justify-content: center;
+    align-items: center;
+
+    nav{
+      display: flex;
+      ul{
+        list-style: none;
+        li{
+          display: inline;
+          padding-right: .5em;
+          padding-left: .5em;
+          font-size: 1.3rem;
+        }
+        li:not(:first-child) {
+          border-left: 2px solid black;
+        }
+
+        a{
+          &:hover{
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .options-icons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg{
+        padding: 0 .5em;
+      }
+      .account{
+        width: 70%;
+      }
+      .darkmode{
+        width: 70%;
+      }
+    }
+  }
+}
