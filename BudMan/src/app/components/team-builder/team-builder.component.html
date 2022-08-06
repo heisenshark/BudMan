@@ -1,0 +1,55 @@
+<div class="container">
+  <div>
+    <div class="box">
+      <h1>Team Generator</h1>
+      <ul>
+        <li *ngFor="let member of members"> {{member}} </li>
+      </ul>
+      <div class="add-members-container">
+        <!--        akcja na wpisywanie czegokolwiek-->
+        <input
+          #addMemberInput
+          type="text"
+          placeholder="name"
+          (input)="onInput(addMemberInput.value)"
+          [value]="newMemberName"
+        >
+        <!--        akcja na wciśnięcie przycisku-->
+        <button (click)="addMember()">Add</button>
+      </div>
+
+      <div class="input-container">
+        <input
+          #teamNumberInput
+          type="number"
+          placeholder="#of teams"
+          (input)="onNumberInput(teamNumberInput.value)"
+          [value]="teamsNumber"
+        >
+        <button (click)="generateTeams()">Generate</button>
+      </div>
+
+
+      <p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
+    </div>
+
+<!--    <div *ngFor="let element of outputTeams;index as i;" class="generated-teams">-->
+<!--      <h1>Team Number: {{i + 1}}</h1>-->
+<!--      <ul class="team-list">-->
+<!--        <li *ngFor="let element2 of element">-->
+<!--          {{element2}}-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+
+    <div *ngIf="outputTeams.length" class="teams-container">
+      <app-team
+        *ngFor="let team of outputTeams; let i = index"
+        [team] = "team"
+        [index] ="i"
+      ></app-team>
+    </div>
+  </div>
+
+
+</div>

@@ -1,0 +1,8 @@
+ul{
+  border: 1px solid gray;
+  padding: 1em;
+  list-style: none;
+  li:not(:first-child) {
+    margin-top: .5em;
+  }
+}
