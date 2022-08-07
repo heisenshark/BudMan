@@ -1,22 +1,49 @@
 .topbar {
   display: flex;
-  height: 8vh;
-  background: #CDC59D;
+  position: fixed;
+  right:0;
+  left: 0;
+  height: 2.5em;
   margin: 0;
   padding: 0;
   border-bottom: 10px solid rgba(56, 53, 35, 0.35);
+  background: #CDC59D;
+  *{
+    filter: drop-shadow(1px 1px 0.1rem rgba(0, 0, 0, 0.1));
+  }
   .home-button {
-    position: center;
+    position: absolute;
     display: flex;
+    left: 0;
+    height: inherit;
     justify-content: center;
     align-items: center;
-
-    h1 {
-      display: flex;
+    margin-left: .3em;
+    a {
+      color: black;
+      &:hover{
+        color: #1a1a1a;
+      }
+      h2 {
+        display: inline-block;
+        padding-left: .2em;
+        margin: auto;
+      }
     }
 
-    svg {
-      display: flex;
+    a {
+      .home-icon {
+        height: inherit;
+        width: 2em;
+
+        svg {
+          display: block;
+          margin: auto;
+          width: 100%;
+          height: inherit;
+
+        }
+      }
     }
   }
 
@@ -28,40 +55,73 @@
     justify-content: center;
     align-items: center;
 
-    nav{
+    nav {
       display: flex;
-      ul{
+      height: inherit;
+
+      ul {
+        margin: auto;
+        padding: 0;
         list-style: none;
-        li{
+        justify-content: center;
+        align-items: center;
+
+        li {
           display: inline;
+
           padding-right: .5em;
           padding-left: .5em;
+
           font-size: 1.3rem;
         }
+
         li:not(:first-child) {
           border-left: 2px solid black;
         }
 
-        a{
-          &:hover{
+        a {
+          &:hover {
             text-decoration: underline;
             cursor: pointer;
           }
         }
       }
     }
+
     .options-icons {
       display: flex;
+      height: inherit;
       justify-content: center;
       align-items: center;
-      svg{
-        padding: 0 .5em;
+      margin: auto;
+
+      svg {
+        &:hover{
+          transform: scale(1.1);
+        }
+        height: 90%;
+        width: auto;
       }
-      .account{
-        width: 70%;
+      a{
+        height: inherit;
+        width: 2em;
+
+        svg {
+          display: block;
+          margin: 0;
+          width: 100%;
+          height: inherit;
+
+        }
+
       }
-      .darkmode{
-        width: 70%;
+      .account {
+        padding: 0;
+        margin-left: 0.5em;
+        margin-right: 0.2em;
+      }
+
+      .darkmode {
       }
     }
   }
