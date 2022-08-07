@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-budman-topbar',
@@ -9,7 +9,18 @@ export class BudmanTopbarComponent implements OnInit {
 
   constructor() { }
 
+  menuOpen:boolean = false
+
   ngOnInit(): void {
   }
 
+  navOpen:boolean = false;
+
+  openMenu(value:boolean){
+    this.navOpen = true;
+  }
+
+  menuIsOpen() {
+
+  }
 }

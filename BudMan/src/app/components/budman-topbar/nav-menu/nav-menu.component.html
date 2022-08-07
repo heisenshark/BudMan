@@ -1,0 +1,23 @@
+<h1>{{isOpen}}</h1>
+<div class="menu-full menu-full-inactive" [@openClose]="isOpen ? 'open' :'closed'">
+  <div class="acc-case">
+    <div class="top">
+      <a class="menu-icon" href="#" (click)="toggle()">
+        <svg width="178" height="156" viewBox="0 0 178 156" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 17H177.5M0 78H177.5M0 139H177.5" stroke="black" stroke-width="34"/>
+        </svg>
+      </a>
+    </div>
+    <div class="buttons">
+      <ul>
+        <li><a href="#">Transactions</a></li>
+        <li><a href="#">Accounts</a></li>
+        <li><a href="#">Categories</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="nav-case">
+  </div>
+</div>
+
+
