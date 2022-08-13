@@ -1,0 +1,152 @@
+$border-width: 2px;
+$border-color: rgba(128, 128, 128, 0.37);
+//
+div {
+  //background: #006b6b;
+  //border: 1px dotted #0e0e42;
+  //z-index: -10;
+}
+
+@media only screen and (min-width: 1200px) {
+  .page {
+    width: 1200px;
+    margin: auto;
+    border-left: $border-color solid 2px;
+    border-right: $border-color solid 2px;
+  }
+}
+
+.page {
+  display: flex;
+  justify-content: space-between;
+  flex: 1 1 auto;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: transparent;
+  width: clamp(660px, 100%, 1200px);
+  z-index: -2;
+
+  .filter-section {
+    display: flex;
+    flex-flow: column;
+    width: 15em;
+    margin-top: 1em;
+    border-radius: 0 .5em 0 0;
+    float: left;
+    border: $border-color solid 2px;
+    border-left: none;
+    flex: 0 0 auto;
+
+    .header-container {
+      margin: 0;
+      padding-top: .4em;
+      padding-left: .2em;
+      flex: 0 1 auto;
+
+      h2 {
+        margin: 0;
+        padding: 0;
+        font-weight: 200;
+      }
+    }
+
+    .filter-options-scrollable {
+      display: flex;
+      flex-flow: column;
+      flex: 0 1 auto;
+      overflow-y: scroll;
+      height: auto;
+
+
+    }
+  }
+
+  .transaction-section {
+    margin-top: 1em;
+    flex: 1 0 auto;
+    align-self: stretch;
+    justify-self: flex-end;
+    flex-flow: column;
+    display: flex;
+    align-items: flex-end;
+    padding-left: 1em;
+
+    h1 {
+      margin: 0;
+      padding: 0;
+      align-self: flex-start;
+    }
+
+    .transactions-table {
+      display: flex;
+      flex-flow: column;
+      width: calc(100%);
+      float: right;
+      border: $border-color solid 2px;
+      border-right: none;
+      border-radius: 1em 0 0 0;
+
+      flex: 1 1 auto;
+      overflow-y: auto;
+      height: auto;
+
+
+      .heading-table-legend {
+        flex: 0 1 auto;
+        padding-left: 1em;
+
+        h1 {
+          font-weight: 100;
+        }
+      }
+
+      .transactions-view {
+        flex: 0 1 auto;
+        overflow-y: auto;
+        padding-left: 1em;
+      }
+    }
+
+    .header-container {
+      margin: 0;
+      padding-top: .4em;
+      padding-left: .2em;
+      flex: 0 1 auto;
+
+      h2 {
+        margin: 0;
+        padding: 0;
+        font-weight: 200;
+      }
+    }
+
+    .transactions-view {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      height: auto;
+    }
+  }
+}
+
+section {
+  width: 90%;
+  display: flex;
+  flex-flow: column;
+  margin: 0 auto;
+  mat-button-toggle-group{
+    display: flex;
+    flex-flow: column;
+  }
+}
+
+.mat-datepicker-popup .mat-card {
+  max-width: 10em;
+}
+
+.e-datepicker .e-datepicker .e-title {
+  color: #006b6b;
+  background: #0b0b34;
+}

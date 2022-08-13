@@ -1,0 +1,65 @@
+<div class="page">
+
+    <div class="filter-section">
+
+        <div class="header-container">
+            <h2>Filter</h2>
+        </div>
+        <div class="filter-options-scrollable">
+            <!--            tutaj powinien być fajny dropdown z opcjami, zrobie go jako oddzielny component-->
+            <section class="example-section">
+                <h2>Date</h2>
+                <mat-checkbox #isDisabled class="example-margin"
+                              [color]="'primary'"
+                              (change) = "dateDisabled = !dateDisabled" >
+                    Use Date?
+                </mat-checkbox>
+
+                <mat-form-field appearance="fill" >
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="picker" [disabled] = "dateDisabled">
+                        <input matStartDate placeholder="Start date">
+                        <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </section>
+            <section class="example-section">
+                <h2>Category</h2>
+                <mat-button-toggle-group name="ingredients" aria-label="Ingredients" multiple>
+                    <mat-button-toggle value="Finance" >Finance</mat-button-toggle>
+                </mat-button-toggle-group>
+            </section>
+
+
+        </div>
+    </div>
+
+    <div class="transaction-section">
+
+        <h1>Transactions</h1>
+        <div class="transactions-table">
+
+            <div class="heading-table-legend">
+                <h1>Balance {{100}}zł</h1>
+                <app-transaction [IsHeader]="true"></app-transaction>
+            </div>
+            <div class="transactions-view">
+                <app-transaction></app-transaction>
+                <app-transaction></app-transaction>
+                <app-transaction></app-transaction>
+                <app-transaction></app-transaction>
+                <app-transaction></app-transaction>
+                <app-transaction></app-transaction>
+                <app-transaction></app-transaction>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
