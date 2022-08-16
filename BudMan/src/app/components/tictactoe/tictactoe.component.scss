@@ -1,0 +1,14 @@
+.page-container{
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-end;
+  height: 100%;
+  max-width: 600px;
+  aspect-ratio: 1/1.5;
+  margin: auto;
+  app-board{
+    flex: 0 1 auto;
+    justify-self: flex-end;
+    align-items: center;
+  }
+}

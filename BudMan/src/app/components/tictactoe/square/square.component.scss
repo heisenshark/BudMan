@@ -1,0 +1,12 @@
+
+div{
+  background: #006b6b;
+  display: flex;
+  padding: 0;
+  aspect-ratio: 1/1;
+  svg{
+    margin: auto;
+    flex: 0 1 auto;
+    width: 60%;
+  }
+}

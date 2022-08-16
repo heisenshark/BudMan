@@ -1,0 +1,27 @@
+h1{
+  font-size: 3rem;
+  align-self: center;
+  justify-self: center;
+  flex: 1 0 auto;
+  margin: 2em 0;
+
+}
+
+
+.squares-container{
+  display: grid;
+  aspect-ratio: 1/1;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 3fr 3fr 3fr;
+  grid-column-gap: .4em;
+  grid-row-gap: .4em;
+  width: 100%;
+  justify-self: flex-end;
+  margin-top: auto;
+}
+
+.ss-container{
+  flex: 1 1 auto;
+  width: 100%;
+
+}

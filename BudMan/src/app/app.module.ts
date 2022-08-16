@@ -23,6 +23,9 @@ import {MatSliderModule} from "@angular/material/slider";
 import {MatBadgeModule} from "@angular/material/badge";
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { TictactoeComponent } from './components/tictactoe/tictactoe.component';
+import { SquareComponent } from './components/tictactoe/square/square.component';
+import { BoardComponent } from './components/tictactoe/board/board.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +35,10 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     NavMenuComponent,
     BudmanTransactionsPageComponent,
     TransactionComponent,
-    CategoryPickerComponent
+    CategoryPickerComponent,
+    TictactoeComponent,
+    SquareComponent,
+    BoardComponent
   ],
     imports: [
         BrowserModule,
