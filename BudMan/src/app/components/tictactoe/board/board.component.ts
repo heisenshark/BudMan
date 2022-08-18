@@ -6,11 +6,13 @@ import {SquareComponent} from "../square/square.component";
     templateUrl: './board.component.html',
     styleUrls: ['./board.component.scss']
 })
+
 export class BoardComponent implements OnInit {
     i: any;
     squares: any[] = ['','','','','','','','','']
     turn: 'X' | 'O' = 'X'
     won:boolean = false
+    draw:boolean =false
     linescheck: number[][] =[
         [1,2,3],
         [4,5,6],
@@ -21,20 +23,22 @@ export class BoardComponent implements OnInit {
         [1,5,9],
         [7,5,3]
     ]
-    constructor() {
-
-    }
-
+    constructor() {}
     checkWin() {
         this.linescheck.map(n=>n.map(n=>n-1)).forEach(
             n=>{
                 let resultstring = ''
                 n.forEach(b=>resultstring+=this.squares[b])
                 if(resultstring=='XXX'||resultstring=='OOO')
+                {
                     this.won = true
-
+                }
             }
         )
+        if(this.won) return
+        if(this.squares.find(n=>n=="")==null)
+            this.draw = true
+
     }
 
     ngOnInit(): void {
@@ -44,18 +48,22 @@ export class BoardComponent implements OnInit {
         console.log(this.squares)
     }
 
-    clog($event: "X" | "O" | "",index:number) {
+    clog(index:number) {
+        let negateVal = (n:'X'|'O')=>{
+            return n=="X"?'O':"X"
+        }
+        if(this.squares[index]!=''||this.won)return
         this.squares[index] = this.turn
         this.checkWin()
         if(!this.won)
-            this.turn = SquareComponent.negateVal(this.turn)
-
+            this.turn = negateVal(this.turn)
         console.log([this.turn,this.won,this.turn])
     }
 
     resetBoard() {
         this.squares= ['','','','','','','','','']
         this.won=false
+        this.draw =false
         this.turn = Math.random()>0.5?'X':'O'
     }
 }

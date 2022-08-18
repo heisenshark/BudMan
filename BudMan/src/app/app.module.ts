@@ -26,6 +26,25 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { TictactoeComponent } from './components/tictactoe/tictactoe.component';
 import { SquareComponent } from './components/tictactoe/square/square.component';
 import { BoardComponent } from './components/tictactoe/board/board.component';
+import { TasksManagerComponent } from './components/tasks-manager/tasks-manager.component';
+import { HeaderComponent } from './components/tasks-manager/header/header.component';
+import { FooterComponent } from './components/tasks-manager/footer/footer.component';
+import { ButtonComponent } from './components/tasks-manager/button/button.component';
+import { TasksComponent } from './components/tasks-manager/tasks/tasks.component';
+import { TasksItemComponent } from './components/tasks-manager/tasks-item/tasks-item.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import { HttpClientModule } from '@angular/common/http';
+import { AddTaskComponent } from './components/tasks-manager/add-task/add-task.component';
+import { RouterModule, Routes } from '@angular/router';
+import { AboutComponent } from './components/tasks-manager/about/about.component';
+
+
+
+const appRoutes:Routes = [
+  {path: '',component: TasksComponent},
+  {path: 'about',component: AboutComponent}
+]
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,11 +57,20 @@ import { BoardComponent } from './components/tictactoe/board/board.component';
     CategoryPickerComponent,
     TictactoeComponent,
     SquareComponent,
-    BoardComponent
+    BoardComponent,
+    TasksManagerComponent,
+    HeaderComponent,
+    FooterComponent,
+    ButtonComponent,
+    TasksComponent,
+    TasksItemComponent,
+    AddTaskComponent,
+    AboutComponent,
   ],
     imports: [
         BrowserModule,
         FormsModule,
+        RouterModule.forRoot(appRoutes, {enableTracing: true}),
         BrowserAnimationsModule,
         MatIconModule,
         MatAutocompleteModule,
@@ -56,7 +84,9 @@ import { BoardComponent } from './components/tictactoe/board/board.component';
         MatBadgeModule,
         ReactiveFormsModule,
         MatNativeDateModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        FontAwesomeModule,
+        HttpClientModule,
     ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]

@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "server": "json-server db.json --port 5000"
   },
   "private": true,
   "dependencies": {
@@ -20,8 +21,15 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "@fortawesome/angular-fontawesome": "^0.11.1",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-brands-svg-icons": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "configstore": "^6.0.0",
     "crypto-browserify": "^3.12.0",
     "crypto-es": "^1.2.7",
+    "json-server": "^0.4.2",
     "random-js": "^2.1.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
@@ -39,5 +47,8 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "typescript": "~4.7.2"
+  },
+  "overrides": {
+    "graceful-fs": "^4.2.10"
   }
 }

@@ -8,27 +8,21 @@ import {BoardComponent} from "../board/board.component";
 })
 export class SquareComponent implements OnInit {
   @Input() val:'X'|'O'|'' = ''
-  @Input() s: number = 0
-  @Output() valChange =new EventEmitter<'X'|'O'|''>();
 
   constructor() {
   }
 
   ngOnInit(): void {
   }
-  @HostListener('click', ['$event']) click(event: { preventDefault: () => void; }) {
-    event.preventDefault()
-    if(this.val != '')
-      return
-    this.valChange.emit('X')
-    console.log([this.s])
-  }
-  public static negateVal(v:'X'|'O'|'') :'X'|'O'{
-    if(v =='X')return 'O'
-    return 'X'
-  }
-  setVal(v:'X'|'O'|''){
-    this.val = v
-  }
+  getColor():string{
+    switch (this.val){
+      case 'X':
+        return `linear-gradient(45deg, rgba(251,63,63,1) 0%, rgba(252,187,70,1) 100%)`
+      case 'O':
+          return 'linear-gradient(45deg, rgba(63,251,124,1) 0%, rgba(70,228,252,1) 100%)'
+      case "":
+        return "linear-gradient(45deg, rgba(63,94,251,1) 0%, rgba(163,70,252,1) 100%)"
+    }
 
+  }
 }

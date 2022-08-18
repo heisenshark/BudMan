@@ -3,12 +3,17 @@
   flex-flow: column;
   justify-content: flex-end;
   height: 100%;
+  width: 100%;
   max-width: 600px;
   aspect-ratio: 1/1.5;
   margin: auto;
+  padding-bottom: 1em;
+
   app-board{
     flex: 0 1 auto;
     justify-self: flex-end;
     align-items: center;
   }
+
 }
+

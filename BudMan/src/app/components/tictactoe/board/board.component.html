@@ -1,10 +1,17 @@
 
-<h1>{{turn}}'s turn</h1>
-<div *ngIf="won"><h1>{{turn}}'s won, reset board?</h1>
+<h1  *ngIf="!won">{{turn}}'s turn</h1>
+
+<div class="message-holder" *ngIf="won"><h1>{{turn}}'s won, reset board?</h1>
         <button (click)="resetBoard()"> <h2>RESET</h2></button>
 </div>
-<div class="squares-container">
-            <app-square (valChange)="clog($event,ii)" *ngFor="let i of squares; index as ii" [s]="ii"
+
+<div class="message-holder" *ngIf="draw"><h1>nobody won, reset board?</h1>
+        <button (click)="resetBoard()"> <h2>RESET</h2></button>
+</div>
+
+<div class="squares-container" >
+            <app-square #square (click)="clog(ii)"
+                        *ngFor="let i of squares; index as ii"
                         [val]="squares[ii]"
                         class="sqr"></app-square>
-        </div>
+</div>
