@@ -150,3 +150,11 @@ section {
   color: #006b6b;
   background: #0b0b34;
 }
+
+:host{
+  position: fixed;
+  top: 3em;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

@@ -38,11 +38,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AddTaskComponent } from './components/tasks-manager/add-task/add-task.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './components/tasks-manager/about/about.component';
+import { TransactionButtonComponent } from './components/budman-transactions-page/transaction-button/transaction-button.component';
+import { TransactionAddComponent } from './components/budman-transactions-page/transaction-add/transaction-add.component';
 
 
 
 const appRoutes:Routes = [
-  {path: '',component: TasksComponent},
+  {path: '',component: BudmanTransactionsPageComponent},
   {path: 'about',component: AboutComponent}
 ]
 @NgModule({
@@ -66,6 +68,8 @@ const appRoutes:Routes = [
     TasksItemComponent,
     AddTaskComponent,
     AboutComponent,
+    TransactionButtonComponent,
+    TransactionAddComponent,
   ],
     imports: [
         BrowserModule,
