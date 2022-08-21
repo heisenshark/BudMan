@@ -1,5 +1,5 @@
 .circle{
-
+    font-size: 0.7rem;
     position: fixed;
     display: flex;
     justify-content: center;
@@ -8,7 +8,7 @@
     right: 0;
     margin-bottom: 2em;
     margin-right: 2em;
-    background-color: aqua;
+    background-color: rgba(255, 180, 40, 0.767);
     border-radius: 100%;
     aspect-ratio: 1/1;
     width: 4em;
@@ -18,8 +18,24 @@
     fa-icon{
         text-align: center;
         justify-content: center;
-        font-size: 3rem;
         color: white;
+        font-size: 3em;
         filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
     }
+    &:hover{
+      background-color: rgba(196, 140, 36, 0.767);
+      filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.637));
+      fa-icon{
+        filter: brightness(0.9);
+      }
+    }
+    &:active{
+      background-color: rgba(172, 122, 30, 0.767);
+      filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.637));
+      fa-icon{
+        filter: brightness(0.6);
+      }
+
+    }
+
 }

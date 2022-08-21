@@ -1,5 +1,6 @@
 <div class="page">
 
+    <app-transaction-add></app-transaction-add>
     <div class="filter-section">
 
         <div class="header-container">
@@ -15,7 +16,7 @@
                     Use Date?
                 </mat-checkbox>
 
-                <mat-form-field appearance="fill" >
+                <mat-form-field appearance="fill" class="mat-field" [ngStyle]="{'width':'20em','font-size':'0.6rem'}">
                     <mat-label>Enter a date range</mat-label>
                     <mat-date-range-input [rangePicker]="picker" [disabled] = "dateDisabled">
                         <input matStartDate placeholder="Start date">
