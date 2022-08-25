@@ -1,24 +1,27 @@
-.vignette {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.363);
-  filter: blur(0.3);
-  z-index: 100;
+  .add-window-wrapper{
+    position: fixed;
+    left: 0;
+    top:0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
   .add-window{
+    position: relative;
     background: white;
     height:80%;
     width:20em;
+    max-height: 500px;
     border-radius: 3em;
     padding: 1em 1.5em;
-
+    display: flex;
+    flex-flow: column;
     box-shadow: 0px 0px 17px -5px rgba(66, 68, 90, 1);
     padding-top: 2em;
-
+    z-index: 1000;
     .form-container{
       overflow-y: auto;
       display: flex;
@@ -35,5 +38,11 @@
         padding: 0;
       }
     }
+
   }
-}
+  .error-class{
+    color: rgb(255, 89, 89);
+  }
+  .info-class{
+    color: rgb(99, 99, 99);
+  }

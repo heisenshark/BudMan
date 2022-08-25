@@ -10,11 +10,11 @@ export class BudmanTopbarComponent implements OnInit {
   constructor() { }
 
   menuOpen:boolean = false
+  navOpen:boolean = false;
 
   ngOnInit(): void {
   }
 
-  navOpen:boolean = false;
 
   openMenu(value:boolean){
     this.navOpen = true;

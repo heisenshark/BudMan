@@ -12,5 +12,175 @@
       "day": "May 6th at 1: 30pm",
       "reminder": false
     }
+  ],
+  "transactions": [
+    {
+      "amount": -733,
+      "name": "Shoes",
+      "category": "player",
+      "account": "Shoes",
+      "date": "2021-10-31T15:35:22.263Z",
+      "id": 15
+    },
+    {
+      "amount": -329,
+      "name": "Bacon",
+      "category": "lacquerware",
+      "account": "Computers",
+      "date": "2022-07-25T21:30:45.222Z",
+      "id": 16
+    },
+    {
+      "amount": -159,
+      "name": "Car",
+      "category": "dinosaur",
+      "account": "Tools",
+      "date": "2021-10-02T17:53:39.907Z",
+      "id": 17
+    },
+    {
+      "amount": -680,
+      "name": "Chair",
+      "category": "cheer",
+      "account": "Clothing",
+      "date": "2022-07-24T03:53:20.653Z",
+      "id": 18
+    },
+    {
+      "amount": -859,
+      "name": "Pizza",
+      "category": "being",
+      "account": "Clothing",
+      "date": "2021-10-15T05:28:40.366Z",
+      "id": 19
+    },
+    {
+      "amount": 652,
+      "name": "Tuna",
+      "category": "thunderbolt",
+      "account": "Outdoors",
+      "date": "2022-02-03T15:58:56.624Z",
+      "id": 20
+    },
+    {
+      "amount": 937,
+      "name": "Ball",
+      "category": "smoking",
+      "account": "Toys",
+      "date": "2022-05-11T04:57:44.430Z",
+      "id": 21
+    },
+    {
+      "amount": -574,
+      "name": "Pizza",
+      "category": "mincemeat",
+      "account": "Industrial",
+      "date": "2022-05-04T02:42:45.383Z",
+      "id": 22
+    },
+    {
+      "amount": 966,
+      "name": "Table",
+      "category": "pork",
+      "account": "Electronics",
+      "date": "2022-03-02T13:55:25.332Z",
+      "id": 23
+    },
+    {
+      "amount": -1000,
+      "name": "Tuna",
+      "category": "boyfriend",
+      "account": "Music",
+      "date": "2021-09-20T23:01:07.137Z",
+      "id": 24
+    },
+    {
+      "amount": -76,
+      "name": "Salad",
+      "category": "overcoat",
+      "account": "Clothing",
+      "date": "2022-05-14T13:58:19.683Z",
+      "id": 25
+    },
+    {
+      "amount": -719,
+      "name": "Keyboard",
+      "category": "backdrop",
+      "account": "Books",
+      "date": "2022-06-17T19:58:40.980Z",
+      "id": 26
+    },
+    {
+      "amount": 963,
+      "name": "Bacon",
+      "category": "aftermath",
+      "account": "Kids",
+      "date": "2022-03-03T01:56:43.502Z",
+      "id": 27
+    },
+    {
+      "amount": 158,
+      "name": "Sausages",
+      "category": "toenail",
+      "account": "Tools",
+      "date": "2022-04-28T12:36:24.542Z",
+      "id": 28
+    },
+    {
+      "amount": 869,
+      "name": "Salad",
+      "category": "ginseng",
+      "account": "Garden",
+      "date": "2021-12-05T10:02:10.953Z",
+      "id": 29
+    },
+    {
+      "amount": 15,
+      "name": "Mouse",
+      "category": "citizenship",
+      "account": "Toys",
+      "date": "2022-07-12T08:02:26.732Z",
+      "id": 30
+    },
+    {
+      "amount": 435,
+      "name": "Chips",
+      "category": "brown",
+      "account": "Clothing",
+      "date": "2021-11-19T21:36:41.544Z",
+      "id": 31
+    },
+    {
+      "amount": -990,
+      "name": "Hat",
+      "category": "toreador",
+      "account": "Jewelery",
+      "date": "2021-10-31T17:18:55.783Z",
+      "id": 32
+    },
+    {
+      "amount": 181,
+      "name": "Pizza",
+      "category": "standpoint",
+      "account": "Tools",
+      "date": "2022-03-10T10:58:39.664Z",
+      "id": 33
+    },
+    {
+      "amount": 556,
+      "name": "Mouse",
+      "category": "balaclava",
+      "account": "Health",
+      "date": "2022-07-05T13:58:13.252Z",
+      "id": 34
+    },
+    {
+      "amount": -568,
+      "name": "Computer",
+      "category": "ephemeris",
+      "account": "Clothing",
+      "date": "2021-09-02T02:15:26.382Z",
+      "id": 35
+    }
   ]
 }

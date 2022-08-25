@@ -5,7 +5,7 @@
         <span class="name">{{Name}}</span>
         <span class="category">{{Category}}</span>
         <span class="account">{{Account}}</span>
-        <span class="date">{{Date}}</span>
+        <span class="date"> {{ getDate() }}</span>
         <span class="amount">{{Amount}}</span>
 
     </div>
@@ -13,11 +13,11 @@
     <div [ngStyle]="{
     'visibility':IsHeader?'hidden':'visible'
     }"  class="icons-side">
-        <a>
+        <a (click)="onEdit.emit(transaction)">
             <mat-icon aria-hidden="false" aria-label="Delete icon" fontIcon="edit">
             </mat-icon>
         </a>
-        <a>
+        <a (click)="onDelete.emit(transaction)">
             <mat-icon aria-hidden="false" aria-label="Delete icon" fontIcon="delete">
             </mat-icon>
         </a>

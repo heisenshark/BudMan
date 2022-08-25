@@ -1,66 +1,94 @@
 <div class="page">
+  <app-transaction-add
+  *ngIf="showAddTrans"
+  (onAddTransaction)="addTransaction($event)"
+  (onEditTransaction)="editTransaction($event)"
 
-    <app-transaction-add></app-transaction-add>
-    <div class="filter-section">
-
-        <div class="header-container">
-            <h2>Filter</h2>
-        </div>
-        <div class="filter-options-scrollable">
-            <!--            tutaj powinien być fajny dropdown z opcjami, zrobie go jako oddzielny component-->
-            <section class="example-section">
-                <h2>Date</h2>
-                <mat-checkbox #isDisabled class="example-margin"
-                              [color]="'primary'"
-                              (change) = "dateDisabled = !dateDisabled" >
-                    Use Date?
-                </mat-checkbox>
-
-                <mat-form-field appearance="fill" class="mat-field" [ngStyle]="{'width':'20em','font-size':'0.6rem'}">
-                    <mat-label>Enter a date range</mat-label>
-                    <mat-date-range-input [rangePicker]="picker" [disabled] = "dateDisabled">
-                        <input matStartDate placeholder="Start date">
-                        <input matEndDate placeholder="End date">
-                    </mat-date-range-input>
-                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker></mat-date-range-picker>
-                </mat-form-field>
-            </section>
-            <section class="example-section">
-                <h2>Category</h2>
-                <mat-button-toggle-group name="ingredients" aria-label="Ingredients" multiple>
-                    <mat-button-toggle value="Finance" >Finance</mat-button-toggle>
-                </mat-button-toggle-group>
-            </section>
-
-
-        </div>
+  ></app-transaction-add>
+  <div class="filter-section">
+    <div class="header-container">
+      <h2>Filter</h2>
     </div>
+    <div class="filter-options-scrollable">
+      <!--            tutaj powinien być fajny dropdown z opcjami, zrobie go jako oddzielny component-->
+      <section class="example-section">
+        <h2>Date</h2>
+        <mat-checkbox
+          #isDisabled
+          class="example-margin"
+          [color]="'primary'"
+          (change)="dateDisabled = !dateDisabled"
+        >
+          Use Date?
+        </mat-checkbox>
 
-    <div class="transaction-section">
-
-        <h1>Transactions</h1>
-        <div class="transactions-table">
-
-            <div class="heading-table-legend">
-                <h1>Balance {{100}}zł</h1>
-                <app-transaction [IsHeader]="true"></app-transaction>
-            </div>
-            <div class="transactions-view">
-                <app-transaction></app-transaction>
-                <app-transaction></app-transaction>
-                <app-transaction></app-transaction>
-                <app-transaction></app-transaction>
-                <app-transaction></app-transaction>
-                <app-transaction></app-transaction>
-                <app-transaction></app-transaction>
-
-            </div>
-        </div>
-
-
+        <mat-form-field
+          appearance="fill"
+          class="mat-field"
+          [ngStyle]="{ width: '20em', 'font-size': '0.6rem' }"
+        >
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input
+            [rangePicker]="picker"
+            [disabled]="dateDisabled"
+          >
+            <input matStartDate placeholder="Start date" />
+            <input matEndDate placeholder="End date" />
+          </mat-date-range-input>
+          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            [for]="picker"
+            matSuffix
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </section>
+      <section class="example-section">
+        <h2>Category</h2>
+        <mat-button-toggle-group
+          name="ingredients"
+          aria-label="Ingredients"
+          multiple
+        >
+          <mat-button-toggle value="Finance">Finance</mat-button-toggle>
+        </mat-button-toggle-group>
+      </section>
     </div>
+  </div>
 
-    <app-transaction-button></app-transaction-button>
+  <div class="transaction-section">
+    <h1>Transactions</h1>
+    <div class="transactions-table">
+      <div class="heading-table-legend">
+        <h1>Balance {{ 100 }}zł</h1>
+        <app-transaction [IsHeader]="true"></app-transaction>
+      </div>
+      <div class="transactions-view">
+        <mat-paginator
+          [length]="transactions.length"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          [pageIndex]="pageIndex"
+          (page)="pageEvent = $event;getTransactionsToUI()"
+          aria-label="Select page"
+        ></mat-paginator>
+        <button (click)="aaa()" >XDDDD</button>
+        <app-transaction
+          *ngFor="let item of transactionsUI"
+          [Name]="item.name"
+          [Amount]="item.amount"
+          [Category]="item.category"
+          [Account]="item.account"
+          [Datee]="item.date"
+          [transaction]="item"
+          (onDelete)="deleteTransaction(item)"
+          (onEdit)="openEditWindow(item)"
+        ></app-transaction>
+      </div>
+    </div>
+  </div>
+
+  <app-transaction-button
+    (click)="onAddTransactionClick()"
+  ></app-transaction-button>
 </div>

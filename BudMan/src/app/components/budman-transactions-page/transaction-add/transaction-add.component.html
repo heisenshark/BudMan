@@ -1,23 +1,30 @@
-<div class="vignette">
-  <div class="add-window">
-    <form class="form-container" (ngSubmit)="onSubmit()">
-      <h1>Add Transaction</h1>
-      <mat-form-field class="form-input" appearance="fill">
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Name" value="">
-      </mat-form-field>
-      <mat-form-field class="form-input" appearance="fill">
+  <app-vignette>
+  </app-vignette>
+
+  <div class="add-window-wrapper">
+
+    <div class="add-window">
+      <form class="form-container" (ngSubmit)="onSubmit()">
+        <h1>{{isEdit?"Edit Transaction":"Add Transaction"}}</h1>
+
+        <mat-form-field class="form-input" appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name" name ="name" [(ngModel)]="name" autocomplete="off">
+        </mat-form-field>
+
+        <mat-form-field class="form-input" appearance="fill">
         <mat-label>Category</mat-label>
-        <input matInput placeholder="Category" value="">
+        <input matInput placeholder="Category" name ="category" value="" [(ngModel)]="category">
       </mat-form-field>
+
       <mat-form-field class="form-input" appearance="fill">
         <mat-label>Account</mat-label>
-        <input matInput placeholder="Account" value="">
+        <input matInput placeholder="Account" name ="account" value="" [(ngModel)]="account">
       </mat-form-field>
-      <mat-form-field class="form-input" appearance="fill">
 
-      <mat-label>Amount</mat-label>
-        <input matInput type="number" placeholder="Amount" value="" autocomplete="off">
+      <mat-form-field class="form-input" appearance="fill" type="number">
+        <mat-label>Amount</mat-label>
+        <input matInput type="text" placeholder="Amount" name ="amount" autocomplete="off" [(ngModel)]="amount" NumbersOnly>
       </mat-form-field>
 
       <mat-form-field class="forma-date" appearance="fill" for="date">
@@ -26,8 +33,15 @@
         <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
         <mat-datepicker #picker ></mat-datepicker>
       </mat-form-field>
-      <button mat-raised-button color="primary">Add</button>
+
+      <button mat-raised-button class="add-button" color="primary">{{isEdit?"Update":"Add"}}</button>
+
     </form>
-    {{date.value}}
+    <h2 class="error-class" *ngIf="error!=''">{{error}}</h2>
+    <h2 class="info-class" *ngIf="info!=''">{{info}}</h2>
+    <button mat-raised-button class="cancel-button" color="secondary" (click)="hideAddTrans()">Cancel</button>
+    <!-- {{name}} -->
+    <!-- {{date.value}} -->
   </div>
 </div>
+

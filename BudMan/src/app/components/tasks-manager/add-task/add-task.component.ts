@@ -3,6 +3,7 @@ import { Task } from '../../../Task'
 import { Output } from '@angular/core'
 import { UiService } from 'src/app/services/ui.service'
 import { Subscription } from 'rxjs'
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
