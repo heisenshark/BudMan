@@ -15,6 +15,8 @@ const httpOptions = {
 })
 export class TransactionService {
   private apiUrl = "http://localhost:5000/transactions"
+  private apiUrl_acc = "http://localhost:5000/accounts"
+  private apiUrl_cat = "http://localhost:5000/categories"
 
   constructor(private http:HttpClient) { }
 
@@ -38,4 +40,16 @@ export class TransactionService {
     let xd = getRandomTrans(100)
     this.http.post<Transaction[]>(this.apiUrl, xd, httpOptions)
   }
+
+  //category related stuff
+
+  getCategories():Observable<string[]>{
+    return this.http.get<string[]>(this.apiUrl_cat)
+  }
+
+  getAccounts():Observable<string[]>{
+    return this.http.get<string[]>(this.apiUrl_acc)
+  }
+
+
 }

@@ -7,7 +7,7 @@
   ></app-transaction-add>
   <div class="filter-section">
     <div class="header-container">
-      <h2>Filter</h2>
+      <h2>Filter Transactions</h2>
     </div>
     <div class="filter-options-scrollable">
       <!--            tutaj powinien być fajny dropdown z opcjami, zrobie go jako oddzielny component-->
@@ -31,9 +31,10 @@
           <mat-date-range-input
             [rangePicker]="picker"
             [disabled]="dateDisabled"
+            [formGroup]="dateRange"
           >
-            <input matStartDate placeholder="Start date" />
-            <input matEndDate placeholder="End date" />
+            <input formControlName="start"  matStartDate placeholder="Start date" />
+            <input formControlName="end" matEndDate placeholder="End date" />
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle
@@ -44,15 +45,27 @@
         </mat-form-field>
       </section>
       <section class="example-section">
-        <h2>Category</h2>
-        <mat-button-toggle-group
-          name="ingredients"
-          aria-label="Ingredients"
-          multiple
-        >
-          <mat-button-toggle value="Finance">Finance</mat-button-toggle>
-        </mat-button-toggle-group>
+        <h2>Categories</h2>
+        <!-- <button (click)="fun()"></button> -->
+        <mat-checkbox #categorycheckbox class="example-margin" color="primary" *ngFor="let item of categories"
+        [checked]="item[1]"
+        (change)="item[1] = (categorycheckbox.checked)"
+        >{{item[0]}}</mat-checkbox>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('sc')">Select All</button>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('dc')">Deselect All</button>
       </section>
+      <section class="example-section">
+        <h2>Accounts</h2>
+        <!-- <button (click)="fun()"></button> -->
+        <mat-checkbox #categorycheckbox class="example-margin" color="primary" *ngFor="let item of accounts"
+        [checked]="item[1]"
+        (change)="item[1] = (categorycheckbox.checked)"
+        >{{item[0]}}</mat-checkbox>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('sa')">Select All</button>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('da')">Deselect All</button>
+      </section>
+      <span class ="filter-error" *ngIf="filterError!=null">{{filterError}}</span>
+      <button mat-raised-button class="filter-button" color="primary" (click)="filterTransactions()">Filter</button>
     </div>
   </div>
 

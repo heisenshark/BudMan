@@ -27,7 +27,7 @@ div {
   bottom: 0;
   background: transparent;
   width: clamp(660px, 100%, 1200px);
-  z-index: -2;
+  z-index: 0;
 
   .filter-section {
     display: flex;
@@ -59,7 +59,26 @@ div {
       flex: 0 1 auto;
       overflow-y: scroll;
       height: auto;
+      .filter-button{
+        margin-top: 2em;
+        width: 80%;
+        align-self: center;
+      }
 
+      .filter-error{
+        color: rgb(199, 101, 101);
+        margin-top: 2em;
+        width: 80%;
+        align-self: center;
+
+      }
+
+      h2 {
+        margin: 0.5em 0 ;
+        margin-top: 1em;
+        padding: 0;
+        font-weight: 200;
+      }
 
     }
   }
@@ -128,6 +147,7 @@ div {
       overflow-y: auto;
       height: auto;
     }
+
   }
 }
 

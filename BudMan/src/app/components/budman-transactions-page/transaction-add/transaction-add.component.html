@@ -39,9 +39,6 @@
     </form>
     <h2 class="error-class" *ngIf="error!=''">{{error}}</h2>
     <h2 class="info-class" *ngIf="info!=''">{{info}}</h2>
-    <button mat-raised-button class="cancel-button" color="secondary" (click)="hideAddTrans()">Cancel</button>
-    <!-- {{name}} -->
-    <!-- {{date.value}} -->
+    <button mat-raised-button class="cancel-button" color="secondary" (click)="hideAddTrans()" (keyup.Escape) ="hideAddTrans()">Cancel</button>
   </div>
 </div>
-

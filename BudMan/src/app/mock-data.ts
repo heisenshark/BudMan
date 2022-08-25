@@ -13,13 +13,29 @@ const httpOptions = {
 }
 let apiUrl = "http://localhost:5000/transactions"
 
+
+const accounts = [
+  "account1",
+  "account2",
+  "account3"
+]
+const categories = [
+  "category1",
+  "category2",
+  "category3",
+  "category4",
+  "category5",
+  "category6",
+  "category7",
+  "category8"
+]
 export function createRandomTransaction(): Transaction {
   return {
     amount: Math.floor(Math.random() * 2000 - 1000),
     name: faker.commerce.product(),
-    category: faker.word.noun(),
-    account: faker.commerce.department(),
-    date: faker.date.past()
+    category: categories[Math.floor(Math.random()*categories.length)],
+    account: accounts[Math.floor(Math.random()*accounts.length)],
+    date: faker.date.past(10)
   }
 }
 export function getRandomTrans(n: number): Transaction[] {
@@ -32,6 +48,5 @@ export function getRandomTrans(n: number): Transaction[] {
 const httpClient = new HttpClient(new HttpXhrBackend({
   build: () => new XMLHttpRequest()
 }))
-
 
 

@@ -7,6 +7,9 @@ import { TaskServiceService } from '../../services/task-service.service'
 import { getRandomTrans } from '../../mock-data'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { PageEvent } from '@angular/material/paginator'
+import { date } from 'random-js'
+import { DateRange } from '@angular/material/datepicker'
+import { FormControl, FormGroup } from '@angular/forms'
 
 interface Food {
   value: string
@@ -22,23 +25,39 @@ export class BudmanTransactionsPageComponent implements OnInit {
     'xd',
     'hf'
   ];
-  foods: Food[] = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' },
+
+  categories: any[] = [
+    ['prawdziwki', true],
+    ['prawdziwki', true],
+    ['prawdziwki', true],
+    ['prawdziwki', true],
+    ['prawdziwki', true],
+    ['prawdziwki', true],
+    ['prawdziwki', true],
   ];
+  accounts = [
+    ['oszczędnościowe', true],
+    ['debetowe', true],
+  ]
+  filterError: string | null = null
+
   range: any
+  dateRange = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
+
   startDate: Date = new Date();
   picker: Date = new Date();
-  dateDisabled: boolean = false;
+  dateDisabled: boolean = true;
   addTransSub: Subscription
   showAddTrans: boolean = false
 
   transactions: Transaction[] = []//[{'id':1, 'amount':123,'name':'xd','category':'sadsad','account':'asd','date':new Date()}]
   transactionsUI: Transaction[] = []
-  pageSize: number = 5
+  pageSize: number = 25
   pageIndex: number = 0
-  pageSizeOptions = [6, 5, 10, 25, 50, 100]
+  pageSizeOptions = [5, 10, 25, 50, 100]
   pageEvent!: PageEvent
 
   constructor(private uiService: UiService,
@@ -52,12 +71,34 @@ export class BudmanTransactionsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.categories = []
+    this.accounts = []
+
     this.trasactionService.getTransactions().subscribe(
       (transactions) => {
         this.transactions = transactions
         this.transactionsUI = transactions.slice(0, this.pageSize)
       }
     )
+
+    this.trasactionService.getCategories().subscribe(
+
+      (cats) => cats.map(
+        (cat: string) => {
+          this.categories.push([cat, true])
+        }
+      )
+
+    )
+    this.trasactionService.getAccounts().subscribe(
+
+      (accs) =>
+        accs.map((acc: string) => {
+          this.accounts.push([acc, true])
+        })
+
+    )
+
   }
 
   onAddTransactionClick() {
@@ -96,8 +137,10 @@ export class BudmanTransactionsPageComponent implements OnInit {
   }
   addTransaction(t: Transaction) {
     this.trasactionService.addTransaction(t).subscribe(
-      tr => { this.transactions.push(tr) }
-
+      tr => {
+        this.transactions.push(tr)
+        this.getTransactionsToUI()
+      }
     )
   }
   editTransaction(t: Transaction) {
@@ -107,5 +150,57 @@ export class BudmanTransactionsPageComponent implements OnInit {
       Object.assign(man, t)
       this.getTransactionsToUI()
     })
+  }
+
+
+  fun() {
+    console.log(this.categories)
+  }
+
+  manipulateFilter(str: string) {
+    switch (str) {
+      case 'sa':
+        this.accounts.forEach(n => n[1] = true)
+        break
+      case 'da':
+        this.accounts.forEach(n => n[1] = false)
+        break
+      case 'sc':
+        this.categories.forEach(n => n[1] = true)
+        break
+      case 'dc':
+        this.categories.forEach(n => n[1] = false)
+        break
+    }
+  }
+  filterTransactions() {
+    if (Math.random() > 0.7) this.filterError = "erorrTest"
+    else this.filterError = null
+
+
+    this.trasactionService.getTransactions().subscribe(
+      (transs) => {
+        this.transactions = []
+        this.transactions = transs.filter(
+          (trans) => {
+            let acc = this.accounts.find((n) => { return n[0] == trans.account && n[1] == true })
+            let cat = this.categories.find((n) => { return n[0] == trans.category && n[1] == true })
+            let td= new Date(trans.date).getTime()
+            console.log(`${acc} ${cat} ${new Date(td).getTime() }`)
+            return acc != undefined && cat != undefined
+              && (this.dateDisabled ||
+                (td < this.dateRange.value.end.getTime()
+                  && td > this.dateRange.value.start.getTime()))
+
+          }
+        )
+
+        this.getTransactionsToUI()
+        console.log(transs)
+        console.log(this.transactionsUI)
+      }
+    )
+
+
   }
 }
