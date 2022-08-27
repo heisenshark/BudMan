@@ -190,20 +190,36 @@
       "id": 20
     },
     {
-      "amount": -903,
-      "name": "Bike",
-      "category": "category3",
+      "amount": -788,
+      "name": "Tuna",
+      "category": "category4",
       "account": "account2",
-      "date": "2013-12-17T08:48:05.964Z",
+      "date": "2015-08-01T20:25:15.813Z",
       "id": 21
     },
     {
-      "amount": -480,
-      "name": "Bike",
-      "category": "category1",
-      "account": "account3",
-      "date": "2021-12-03T23:43:52.066Z",
+      "amount": -618,
+      "name": "Gloves",
+      "category": "category6",
+      "account": "account1",
+      "date": "2019-01-11T04:10:07.239Z",
       "id": 22
+    },
+    {
+      "amount": 321,
+      "name": "Pants",
+      "category": "category5",
+      "account": "account2",
+      "date": "2016-11-17T14:34:59.420Z",
+      "id": 23
+    },
+    {
+      "amount": 752,
+      "name": "Shirt",
+      "category": "category4",
+      "account": "account3",
+      "date": "2018-05-31T07:31:59.239Z",
+      "id": 24
     }
   ]
 }

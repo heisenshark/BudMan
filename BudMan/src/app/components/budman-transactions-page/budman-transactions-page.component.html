@@ -1,11 +1,14 @@
 <div class="page">
+
   <app-transaction-add
   *ngIf="showAddTrans"
   (onAddTransaction)="addTransaction($event)"
   (onEditTransaction)="editTransaction($event)"
 
   ></app-transaction-add>
+
   <div class="filter-section">
+
     <div class="header-container">
       <h2>Filter Transactions</h2>
     </div>
@@ -19,7 +22,7 @@
           [color]="'primary'"
           (change)="dateDisabled = !dateDisabled"
         >
-          Use Date?
+          Date Range
         </mat-checkbox>
 
         <mat-form-field
@@ -47,44 +50,54 @@
       <section class="example-section">
         <h2>Categories</h2>
         <!-- <button (click)="fun()"></button> -->
-        <mat-checkbox #categorycheckbox class="example-margin" color="primary" *ngFor="let item of categories"
-        [checked]="item[1]"
-        (change)="item[1] = (categorycheckbox.checked)"
-        >{{item[0]}}</mat-checkbox>
+        <div class = "categories-div">
+          <mat-checkbox #categorycheckbox class="example-margin" color="primary" *ngFor="let item of categories"
+          [checked]="item[1]"
+          (change)="item[1] = (categorycheckbox.checked)"
+          >{{item[0]}}</mat-checkbox>
+        </div>
+
         <button mat-raised-button color="secondary" (click)="manipulateFilter('sc')">Select All</button>
         <button mat-raised-button color="secondary" (click)="manipulateFilter('dc')">Deselect All</button>
       </section>
       <section class="example-section">
         <h2>Accounts</h2>
         <!-- <button (click)="fun()"></button> -->
-        <mat-checkbox #categorycheckbox class="example-margin" color="primary" *ngFor="let item of accounts"
-        [checked]="item[1]"
-        (change)="item[1] = (categorycheckbox.checked)"
-        >{{item[0]}}</mat-checkbox>
+
+        <div class="accounts-div">
+          <mat-checkbox #accountcheckbox class="example-margin" color="primary" *ngFor="let item of accounts"
+          [checked]="item[1]"
+          (change)="item[1] = (accountcheckbox.checked)"
+          >{{item[0]}}</mat-checkbox>
+
+        </div>
+
         <button mat-raised-button color="secondary" (click)="manipulateFilter('sa')">Select All</button>
         <button mat-raised-button color="secondary" (click)="manipulateFilter('da')">Deselect All</button>
       </section>
-      <span class ="filter-error" *ngIf="filterError!=null">{{filterError}}</span>
       <button mat-raised-button class="filter-button" color="primary" (click)="filterTransactions()">Filter</button>
+      <span class ="filter-error" *ngIf="filterError!=null">{{filterError}}</span>
     </div>
   </div>
 
   <div class="transaction-section">
+
     <h1>Transactions</h1>
     <div class="transactions-table">
       <div class="heading-table-legend">
-        <h1>Balance {{ 100 }}zł</h1>
+        <h1>Balance ${{ calculateBalance() }}</h1>
+        <mat-paginator
+        [length]="transactions.length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageIndex"
+        (page)="pageEvent = $event;getTransactionsToUI()"
+        aria-label="Select page"
+      ></mat-paginator>
         <app-transaction [IsHeader]="true"></app-transaction>
+
       </div>
       <div class="transactions-view">
-        <mat-paginator
-          [length]="transactions.length"
-          [pageSize]="pageSize"
-          [pageSizeOptions]="pageSizeOptions"
-          [pageIndex]="pageIndex"
-          (page)="pageEvent = $event;getTransactionsToUI()"
-          aria-label="Select page"
-        ></mat-paginator>
         <button (click)="aaa()" >XDDDD</button>
         <app-transaction
           *ngFor="let item of transactionsUI"
@@ -97,11 +110,14 @@
           (onDelete)="deleteTransaction(item)"
           (onEdit)="openEditWindow(item)"
         ></app-transaction>
+        <div [ngStyle]="{'height':'8em'}"></div>
+
       </div>
+      <app-transaction-button
+      (click)="onAddTransactionClick()"
+    ></app-transaction-button>
+
     </div>
   </div>
 
-  <app-transaction-button
-    (click)="onAddTransactionClick()"
-  ></app-transaction-button>
 </div>

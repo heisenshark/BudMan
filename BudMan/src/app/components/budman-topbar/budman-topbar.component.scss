@@ -103,6 +103,7 @@ $topbar-height: 2.5em;
         }
 
         a {
+          all:unset;
           &:hover {
             text-decoration: underline;
             cursor: pointer;
@@ -162,6 +163,7 @@ $topbar-height: 2.5em;
 
     .menu-icon {
       display: none;
+      cursor: pointer;
     }
 
   }

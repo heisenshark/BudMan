@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { UiService } from '../../services/ui.service';
 import {
   trigger,
   state,
@@ -33,18 +34,19 @@ import {
 export class NavMenuComponent implements OnInit {
 
 
-  @Input()  isOpen:boolean = false;
-  @Output() isOpenChange = new EventEmitter<boolean>();
-            isClosed:boolean = true;
-  constructor() {
+  isClosed:boolean = true;
+
+  constructor(private uiService: UiService) {
+    uiService.onShowMobile().subscribe(
+      (n) => this.isClosed = !n
+    )
   }
 
   ngOnInit(): void {
   }
 
   toggle() {
-    this.isOpen = false;
-    this.isOpenChange.emit(this.isOpen)
+    this.uiService.showMobile(false)
   }
 
 }

@@ -6,7 +6,7 @@ import { TeamBuilderComponent } from './components/team-builder/team-builder.com
 import { TeamComponent } from './components/team-builder/team/team.component'
 import { BudmanTopbarComponent } from './components/budman-topbar/budman-topbar.component'
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
-import { NavMenuComponent } from './components/budman-topbar/nav-menu/nav-menu.component'
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { BudmanTransactionsPageComponent } from './components/budman-transactions-page/budman-transactions-page.component'
 import { TransactionComponent } from './components/budman-transactions-page/transaction/transaction.component'
@@ -42,12 +42,16 @@ import { TransactionButtonComponent } from './components/budman-transactions-pag
 import { TransactionAddComponent } from './components/budman-transactions-page/transaction-add/transaction-add.component'
 import { NumbersOnlyDirective } from './directives/numbers-only.directive'
 import { VignetteComponent } from './components/vignette/vignette.component'
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
+import { BudmanCategoryPageComponent } from './components/budman-category-page/budman-category-page.component';
+import { BudmanAccountPageComponent } from './components/budman-account-page/budman-account-page.component'
 
 
 const appRoutes: Routes = [
-  { path: '', component: BudmanTransactionsPageComponent },
-  { path: 'about', component: AboutComponent }
+  { path: 'transactions', component: BudmanTransactionsPageComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'categories', component: BudmanCategoryPageComponent },
+  { path: 'accounts', component: BudmanAccountPageComponent },
 ]
 @NgModule({
   declarations: [
@@ -74,6 +78,8 @@ const appRoutes: Routes = [
     TransactionAddComponent,
     NumbersOnlyDirective,
     VignetteComponent,
+    BudmanCategoryPageComponent,
+    BudmanAccountPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,8 @@ export class UiService {
   private subject:any = new Subject()
   private showAddTransaction = false
   private addTransactionSubject:any = new Subject()
+  private showMobileNav: boolean = false
+  private showMobileNavSubject:any = new Subject()
 
   private edittedTrans:Transaction|null= null
   constructor() { }
@@ -43,4 +45,14 @@ export class UiService {
   getEdittedTrans(){
     return this.edittedTrans
   }
+
+  showMobile(b :boolean){
+    this.showMobileNav = b
+    this.showMobileNavSubject.next(b)
+  }
+
+  onShowMobile():Observable<any>{
+    return this.showMobileNavSubject.asObservable()
+  }
+
 }

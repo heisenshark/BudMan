@@ -1,4 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { UiService } from '../../services/ui.service';
 
 @Component({
   selector: 'app-budman-topbar',
@@ -7,7 +8,9 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 })
 export class BudmanTopbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private uiService:UiService) {
+
+   }
 
   menuOpen:boolean = false
   navOpen:boolean = false;
@@ -16,11 +19,9 @@ export class BudmanTopbarComponent implements OnInit {
   }
 
 
-  openMenu(value:boolean){
-    this.navOpen = true;
+  openMenu(){
+    this.uiService.showMobile(true)
+    console.log('dupa')
   }
 
-  menuIsOpen() {
-
-  }
 }

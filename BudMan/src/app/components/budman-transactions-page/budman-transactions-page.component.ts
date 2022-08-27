@@ -175,9 +175,21 @@ export class BudmanTransactionsPageComponent implements OnInit {
   }
   filterTransactions() {
     if (Math.random() > 0.7) this.filterError = "erorrTest"
-    else this.filterError = null
-
-
+    if(this.accounts.find((n) => { return n[1] == true }) == undefined)
+      {
+        this.filterError = "Select at least one account"
+        return
+      }
+    if(this.categories.find((n) => { return n[1] == true }) == undefined)
+      {
+        this.filterError = "Select at least one category"
+        return
+      }
+    if(!this.dateDisabled&&(this.dateRange.value.end == null || this.dateRange.value.start ==null) )
+      {
+        this.filterError = "Select a valid data range"
+        return
+      }
     this.trasactionService.getTransactions().subscribe(
       (transs) => {
         this.transactions = []
@@ -196,11 +208,19 @@ export class BudmanTransactionsPageComponent implements OnInit {
         )
 
         this.getTransactionsToUI()
+        this.filterError = null
         console.log(transs)
         console.log(this.transactionsUI)
       }
     )
+  }
 
-
+  calculateBalance():number{
+    return this.transactions.reduce(
+      (acc,val)=>{
+        return acc + val.amount
+      }
+      ,0
+    )
   }
 }

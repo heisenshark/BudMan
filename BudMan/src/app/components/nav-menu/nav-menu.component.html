@@ -1,7 +1,7 @@
-<div class="menu-full menu-full-inactive" [@openclose]="isOpen ? 'open' :'closed'">
+<div class="menu-full menu-full-inactive" [@openclose]="!isClosed ? 'open' :'closed'">
   <div class="acc-case">
     <div class="top">
-      <a class="menu-icon" href="#" (click)="toggle()">
+      <a class="menu-icon" (click)="toggle()">
         <svg width="178" height="156" viewBox="0 0 178 156" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 17H177.5M0 78H177.5M0 139H177.5" stroke="black" stroke-width="34"/>
         </svg>
@@ -9,9 +9,9 @@
     </div>
     <div class="buttons">
       <ul>
-        <li><a href="#">Transactions</a></li>
-        <li><a href="#">Accounts</a></li>
-        <li><a href="#">Categories</a></li>
+        <li><a routerLink="/transactions"(click)="toggle()" >Transactions</a></li>
+        <li><a routerLink="/accounts" (click)="toggle()">Accounts</a></li>
+        <li><a routerLink="/categories" (click)="toggle()">Categories</a></li>
       </ul>
     </div>
   </div>

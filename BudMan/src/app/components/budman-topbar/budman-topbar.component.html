@@ -1,6 +1,5 @@
 <div class="bar-container">
 </div>
-<app-nav-menu #MenuMobile [(isOpen)] = "navOpen"></app-nav-menu>
 <div class="top-bar">
   <div class="home-button">
       <a href="#">
@@ -20,14 +19,14 @@
   <div class="right-side">
       <nav>
         <ul>
-          <li><a>Transactions</a></li>
-          <li><a>Accounts</a></li>
-          <li><a>Categories</a></li>
+          <li><a routerLink="/transactions">Transactions</a></li>
+          <li><a routerLink="/accounts">Accounts</a></li>
+          <li><a routerLink="/categories">Categories</a></li>
         </ul>
       </nav>
       <div class="options-icons">
 
-        <a class="menu-icon" href="#" (click)="openMenu(true)"  >
+        <a class="menu-icon" (click)="openMenu()"  >
           <svg width="178" height="156" viewBox="0 0 178 156" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 17H177.5M0 78H177.5M0 139H177.5" stroke="black" stroke-width="34"/>
           </svg>
