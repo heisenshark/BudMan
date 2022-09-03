@@ -1,8 +1,11 @@
 export interface Transaction{
-  id?:number
+  id?:string
   amount:number
   name: string
   category:string
-  account:string
+  account:{
+    id:string,
+    name:string
+  }
   date: Date
 }

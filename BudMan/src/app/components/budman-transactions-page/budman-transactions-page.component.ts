@@ -4,7 +4,7 @@ import { Subscription, Observable } from 'rxjs'
 import { TransactionService } from 'src/app/services/transaction.service'
 import { Transaction } from '../../Transaction'
 import { TaskServiceService } from '../../services/task-service.service'
-import { getRandomTrans } from '../../mock-data'
+// import { getRandomTrans } from '../../mock-data'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { PageEvent } from '@angular/material/paginator'
 import { date } from 'random-js'
@@ -129,11 +129,11 @@ export class BudmanTransactionsPageComponent implements OnInit {
     this.uiService.displayAddTransaction(true)
   }
   aaa() {
-    this.trasactionService.addTransaction(getRandomTrans(1)[0]).subscribe((trans) => {
-      this.transactions.push(trans)
-      this.getTransactionsToUI()
-    })
-    //this.trasactionService.randomShit()
+  //   this.trasactionService.addTransaction(getRandomTrans(1)[0]).subscribe((trans) => {
+  //     this.transactions.push(trans)
+  //     this.getTransactionsToUI()
+  //   })
+  //   //this.trasactionService.randomShit()
   }
   addTransaction(t: Transaction) {
     this.trasactionService.addTransaction(t).subscribe(
@@ -174,28 +174,28 @@ export class BudmanTransactionsPageComponent implements OnInit {
     }
   }
   filterTransactions() {
-    if (Math.random() > 0.7) this.filterError = "erorrTest"
-    if(this.accounts.find((n) => { return n[1] == true }) == undefined)
-      {
-        this.filterError = "Select at least one account"
-        return
-      }
-    if(this.categories.find((n) => { return n[1] == true }) == undefined)
-      {
-        this.filterError = "Select at least one category"
-        return
-      }
-    if(!this.dateDisabled&&(this.dateRange.value.end == null || this.dateRange.value.start ==null) )
-      {
-        this.filterError = "Select a valid data range"
-        return
-      }
+    // if (Math.random() > 0.7) this.filterError = "erorrTest"
+    // if(this.accounts.find((n) => { return n[1] == true }) == undefined)
+    //   {
+    //     this.filterError = "Select at least one account"
+    //     return
+    //   }
+    // if(this.categories.find((n) => { return n[1] == true }) == undefined)
+    //   {
+    //     this.filterError = "Select at least one category"
+    //     return
+    //   }
+    // if(!this.dateDisabled&&(this.dateRange.value.end == null || this.dateRange.value.start ==null) )
+    //   {
+    //     this.filterError = "Select a valid data range"
+    //     return
+    //   }
     this.trasactionService.getTransactions().subscribe(
       (transs) => {
         this.transactions = []
         this.transactions = transs.filter(
           (trans) => {
-            let acc = this.accounts.find((n) => { return n[0] == trans.account && n[1] == true })
+            let acc = this.accounts.find((n) => { return n[0] == trans.account.name && n[1] == true })
             let cat = this.categories.find((n) => { return n[0] == trans.category && n[1] == true })
             let td= new Date(trans.date).getTime()
             console.log(`${acc} ${cat} ${new Date(td).getTime() }`)

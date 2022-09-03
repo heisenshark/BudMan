@@ -57,7 +57,7 @@ export class TransactionAddComponent implements OnInit {
     console.log(this.transToEdit)
     console.log('dupa')
     let trans = (this.transToEdit as Transaction)
-    this.account = trans.account
+    //this.account = trans.account
     this.name = trans.name
     this.category = trans.category
     this.amount = `${trans.amount}`
@@ -91,7 +91,10 @@ export class TransactionAddComponent implements OnInit {
       amount: +this.amount,
       name: this.name,
       category: this.category,
-      account: this.account,
+      account: {
+        id:"sdfsdf",
+        name:"234",
+      },
       date: this.date.value
     }
 

@@ -1,4 +1,4 @@
-package com.example.BudmanServer;
+package com.example.BudmanServer.account;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

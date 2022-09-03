@@ -2,7 +2,7 @@ import { Observable, of} from 'rxjs';
 import { HttpClient,HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Transaction } from '../Transaction';
-import { getRandomTrans } from '../mock-data'
+// import { getRandomTrans } from '../mock-data'
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -10,11 +10,17 @@ const httpOptions = {
   })
 }
 
+const httpOptions2 = {
+  headers: new HttpHeaders({
+    "Access-Control-Allow-Origin": "*"
+  })
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionService {
-  private apiUrl = "http://localhost:5000/transactions"
+  private apiUrl = "http://localhost:8080/api/v1/transactions/"
   private apiUrl_acc = "http://localhost:5000/accounts"
   private apiUrl_cat = "http://localhost:5000/categories"
 
@@ -27,7 +33,7 @@ export class TransactionService {
     return this.http.post<Transaction>(this.apiUrl,trans,httpOptions)
   }
 
-  deleteTransaction(index:number):Observable<Transaction>{
+  deleteTransaction(index:string):Observable<Transaction>{
     const url = `${this.apiUrl}/${index}`
     return this.http.delete<Transaction>(url)
   }
@@ -36,10 +42,10 @@ export class TransactionService {
     const url = `${this.apiUrl}/${trans.id}`
     return this.http.put<Transaction>(url,trans,httpOptions)
   }
-  randomShit(){
-    let xd = getRandomTrans(100)
-    this.http.post<Transaction[]>(this.apiUrl, xd, httpOptions)
-  }
+  // randomShit(){
+  //   let xd = getRandomTrans(100)
+  //   this.http.post<Transaction[]>(this.apiUrl, xd, httpOptions)
+  // }
 
   //category related stuff
 

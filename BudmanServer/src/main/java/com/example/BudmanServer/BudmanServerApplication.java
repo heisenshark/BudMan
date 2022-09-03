@@ -1,16 +1,13 @@
 package com.example.BudmanServer;
 
+import com.example.BudmanServer.account.AccountRepository;
+import com.example.BudmanServer.transaction.TransactionRepository;
+import com.example.BudmanServer.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class BudmanServerApplication {
@@ -21,9 +18,9 @@ public class BudmanServerApplication {
 
 	@Bean
 	CommandLineRunner runner(UserRepository userRepository,
-		TransactionRepository transactionRepository,
-		AccountRepository accountRepository,
-		MongoTemplate mongoTemplate
+							 TransactionRepository transactionRepository,
+							 AccountRepository accountRepository,
+							 MongoTemplate mongoTemplate
 	){
 //		return args ->{
 //			String login = "edfgdfgdfg";

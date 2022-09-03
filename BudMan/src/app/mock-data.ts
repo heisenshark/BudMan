@@ -29,24 +29,24 @@ const categories = [
   "category7",
   "category8"
 ]
-export function createRandomTransaction(): Transaction {
-  return {
-    amount: Math.floor(Math.random() * 2000 - 1000),
-    name: faker.commerce.product(),
-    category: categories[Math.floor(Math.random()*categories.length)],
-    account: accounts[Math.floor(Math.random()*accounts.length)],
-    date: faker.date.past(10)
-  }
-}
-export function getRandomTrans(n: number): Transaction[] {
-  const transactions: Transaction[] = []
-  Array.from({ length: n }).forEach(() => {
-    transactions.push(createRandomTransaction())
-  })
-  return transactions
-}
-const httpClient = new HttpClient(new HttpXhrBackend({
-  build: () => new XMLHttpRequest()
-}))
+// export function createRandomTransaction(): Transaction {
+//   return {
+//     amount: Math.floor(Math.random() * 2000 - 1000),
+//     name: faker.commerce.product(),
+//     category: categories[Math.floor(Math.random()*categories.length)],
+//     account: accounts[Math.floor(Math.random()*accounts.length)],
+//     date: faker.date.past(10)
+//   }
+// }
+// export function getRandomTrans(n: number): Transaction[] {
+//   const transactions: Transaction[] = []
+//   Array.from({ length: n }).forEach(() => {
+//     transactions.push(createRandomTransaction())
+//   })
+//   return transactions
+// }
+// const httpClient = new HttpClient(new HttpXhrBackend({
+//   build: () => new XMLHttpRequest()
+// }))
 
 
