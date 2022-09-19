@@ -44,7 +44,9 @@ import { NumbersOnlyDirective } from './directives/numbers-only.directive'
 import { VignetteComponent } from './components/vignette/vignette.component'
 import { DatePipe } from '@angular/common';
 import { BudmanCategoryPageComponent } from './components/budman-category-page/budman-category-page.component';
-import { BudmanAccountPageComponent } from './components/budman-account-page/budman-account-page.component'
+import { BudmanAccountPageComponent } from './components/budman-account-page/budman-account-page.component';
+import { LoginPageComponent } from './components/login-page/login-page.component'
+import { httpInterceptorProviders } from './_helpers/http.intreceptor'
 
 
 const appRoutes: Routes = [
@@ -52,6 +54,7 @@ const appRoutes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'categories', component: BudmanCategoryPageComponent },
   { path: 'accounts', component: BudmanAccountPageComponent },
+  { path: 'login', component: LoginPageComponent },
 ]
 @NgModule({
   declarations: [
@@ -80,6 +83,7 @@ const appRoutes: Routes = [
     VignetteComponent,
     BudmanCategoryPageComponent,
     BudmanAccountPageComponent,
+    LoginPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,7 +108,9 @@ const appRoutes: Routes = [
     MatPaginatorModule,
   ],
   providers: [MatDatepickerModule,
-    DatePipe],
+    DatePipe,
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

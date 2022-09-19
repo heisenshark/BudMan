@@ -1,6 +1,6 @@
 package com.example.BudmanServer.account;
 
-import com.example.BudmanServer.user.User;
+import com.example.BudmanServer.user.UserAccount;
 import com.example.BudmanServer.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,14 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
-    public Optional<User> addUserAccount(String userId, String name){
+    public Optional<UserAccount> addUserAccount(String userId, String name){
         var user = userRepository.findById(userId);
         user.ifPresentOrElse(
                 (u) -> {
                     if( u.getAccounts() == null) u.setAccounts(new ArrayList<Account>());
-                    u.getAccounts().stream().filter((n) -> n.getName().equals(name)).findFirst().ifPresentOrElse(null,
+                    u.getAccounts().stream().filter((n) -> n.getName().equals(name)).findFirst().ifPresentOrElse((a)-> {
+                                ;
+                            },
                             () -> {
                                 var xd = accountRepository.insert(new Account(name));
                                 u.getAccounts().add(xd);
@@ -33,7 +35,7 @@ public class AccountService {
         return user;
     }
 
-    public Optional<User> deleteUserAccount(String userId, String accountId){
+    public Optional<UserAccount> deleteUserAccount(String userId, String accountId){
         var user = userRepository.findById(userId);
         user.ifPresentOrElse(
                 (u) -> {
@@ -52,7 +54,7 @@ public class AccountService {
         return user;
     }
 
-    public Optional<User> updateUserAccount(String userId, String accountId, String accountName) {
+    public Optional<UserAccount> updateUserAccount(String userId, String accountId, String accountName) {
         var user = userRepository.findById(userId);
         user.ifPresentOrElse(
                 (u) -> {

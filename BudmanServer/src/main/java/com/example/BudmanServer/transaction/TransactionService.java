@@ -1,11 +1,9 @@
 package com.example.BudmanServer.transaction;
 
 import com.example.BudmanServer.account.AccountRepository;
-import com.example.BudmanServer.user.User;
 import com.example.BudmanServer.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;

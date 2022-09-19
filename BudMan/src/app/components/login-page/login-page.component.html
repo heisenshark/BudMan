@@ -1,0 +1,26 @@
+<form class="form-container" (ngSubmit)="logIn()">
+  <mat-form-field class="form-input" appearance="fill">
+    <mat-label>Login</mat-label>
+    <input
+      matInput
+      placeholder="Login"
+      name="login"
+      [(ngModel)]="login"
+      autocomplete="off"
+    />
+  </mat-form-field>
+
+  <mat-form-field class="form-input" appearance="fill">
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      placeholder="Password"
+      name="password"
+      value=""
+      [(ngModel)]="password"
+    />
+  </mat-form-field>
+
+  <button mat-raised-button class="add-button" color="primary"> LogIn/SignIn</button>
+
+</form>

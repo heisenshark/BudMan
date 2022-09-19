@@ -1,28 +1,33 @@
 package com.example.BudmanServer.user;
 
 import com.example.BudmanServer.Category;
-import com.example.BudmanServer.account.Account;
 import com.example.BudmanServer.account.AccountRepository;
+import com.example.BudmanServer.auth.UserDetailsImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//import org.springframework.security.core.userdetails.User;
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
 
-    public List<User> getAllUsers(){
+    public List<UserAccount> getAllUsers(){
         return userRepository.findAll();
     }
 
-    public User updateUser(String userId, String login, String password) {
+    public UserAccount updateUser(String userId, String login, String password) {
         var user = userRepository.findById(userId);
         user.ifPresent((u)->{
             u.setLogin(login);
@@ -39,12 +44,12 @@ public class UserService {
             return "";
         }
         else {
-            var ussr = new User(login,password, LocalDateTime.now());
+            var ussr = new UserAccount(login,password, LocalDateTime.now());
             userRepository.insert(ussr);
             return ussr.getId();
         }
     }
-    public Optional<User> addUserCategory(String userId, String category){
+    public Optional<UserAccount> addUserCategory(String userId, String category){
         var user = userRepository.findById(userId);
         user.ifPresentOrElse(
                 (u) -> {
@@ -63,7 +68,7 @@ public class UserService {
         );
         return user;
     }
-    public Optional<User> deleteUserCategory(String userId, Integer categoryId){
+    public Optional<UserAccount> deleteUserCategory(String userId, Integer categoryId){
         var user = userRepository.findById(userId);
         user.ifPresentOrElse(
                 (u) -> {
@@ -81,7 +86,7 @@ public class UserService {
         return user;
     }
 
-    public Optional<User> updateUserCategory(String userId, Integer categoryId, String categoryName) {
+    public Optional<UserAccount> updateUserCategory(String userId, Integer categoryId, String categoryName) {
         var user = userRepository.findById(userId);
         user.ifPresentOrElse(
                 (u) -> {
@@ -97,6 +102,21 @@ public class UserService {
                 }
         );
         return user;
+    }
+
+    public UserDetails loadUserByUsername(String username) {
+        var user = userRepository.findUserByLogin(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+
+        return UserDetailsImpl.build(user);
+    }
+
+    public UserAccount findUserById(String id){
+        return userRepository.findById(id).orElse(null);
+    }
+    public UserDetailsImpl findOneById(String id) {
+        var u = userRepository.findById(id);
+        return u.map(UserDetailsImpl::build).orElse(null);
     }
 
 }
