@@ -1,10 +1,11 @@
 $border-width: 2px;
 $border-color: rgba(128, 128, 128, 0.37);
 //
-div {
-  //background: #006b6b;
-  //border: 1px dotted #0e0e42;
-  //z-index: -10;
+
+
+:host{
+  background-color: inherit;
+  color: inherit;
 }
 
 @media only screen and (min-width: 1200px) {

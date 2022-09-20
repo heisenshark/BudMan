@@ -46,8 +46,9 @@ import { DatePipe } from '@angular/common';
 import { BudmanCategoryPageComponent } from './components/budman-category-page/budman-category-page.component';
 import { BudmanAccountPageComponent } from './components/budman-account-page/budman-account-page.component';
 import { LoginPageComponent } from './components/login-page/login-page.component'
-import { httpInterceptorProviders } from './_helpers/http.intreceptor'
-
+import { httpInterceptorProviders } from './_helpers/http.intreceptor';
+import { TransactionAddDialogComponent } from './components/budman-transactions-page/transaction-add-dialog/transaction-add-dialog.component'
+import {MatDialogModule} from '@angular/material/dialog';
 
 const appRoutes: Routes = [
   { path: 'transactions', component: BudmanTransactionsPageComponent },
@@ -55,6 +56,8 @@ const appRoutes: Routes = [
   { path: 'categories', component: BudmanCategoryPageComponent },
   { path: 'accounts', component: BudmanAccountPageComponent },
   { path: 'login', component: LoginPageComponent },
+  { path: 'register', component: LoginPageComponent },
+  { path: 'forgot', component: LoginPageComponent },
 ]
 @NgModule({
   declarations: [
@@ -84,6 +87,7 @@ const appRoutes: Routes = [
     BudmanCategoryPageComponent,
     BudmanAccountPageComponent,
     LoginPageComponent,
+    TransactionAddDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -106,6 +110,7 @@ const appRoutes: Routes = [
     FontAwesomeModule,
     HttpClientModule,
     MatPaginatorModule,
+    MatDialogModule,
   ],
   providers: [MatDatepickerModule,
     DatePipe,

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
+import { firstValueFrom, Observable } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -32,12 +33,21 @@ export class AuthServiceService {
         console.log((n as HttpResponse<any>).headers)
 
       })
-
-
   }
 
   signUp() {
 
+  }
+
+  public register (login: string, password: string,email:string):Observable<any> {
+    return  this.http.post<Object>(`${this.apiUrl}/signup`,
+      {
+        "username": login,
+        "password": password,
+        "email":email
+      },
+      httpOptions
+    )
   }
 
 

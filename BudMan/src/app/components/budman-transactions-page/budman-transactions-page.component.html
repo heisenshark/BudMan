@@ -57,8 +57,8 @@
           >{{item[0]}}</mat-checkbox>
         </div>
 
-        <button mat-raised-button color="secondary" (click)="manipulateFilter('sc')">Select All</button>
-        <button mat-raised-button color="secondary" (click)="manipulateFilter('dc')">Deselect All</button>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('selectCategories')">Select All</button>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('deselectCategories')">Deselect All</button>
       </section>
       <section class="example-section">
         <h2>Accounts</h2>
@@ -72,8 +72,8 @@
 
         </div>
 
-        <button mat-raised-button color="secondary" (click)="manipulateFilter('sa')">Select All</button>
-        <button mat-raised-button color="secondary" (click)="manipulateFilter('da')">Deselect All</button>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('selectAccounts')">Select All</button>
+        <button mat-raised-button color="secondary" (click)="manipulateFilter('deselectAccounts')">Deselect All</button>
       </section>
       <button mat-raised-button class="filter-button" color="primary" (click)="filterTransactions()">Filter</button>
       <span class ="filter-error" *ngIf="filterError!=null">{{filterError}}</span>

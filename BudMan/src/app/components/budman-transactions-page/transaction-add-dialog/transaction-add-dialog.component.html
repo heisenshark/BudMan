@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>{{isEdit?"Edit Transaction":"Add Transaction"}}</h1>
+<div mat-dialog-content>
+
+
+  <form class="form-container" (ngSubmit)="onSubmit()">
+    <h1>{{isEdit?"Edit Transaction":"Add Transaction"}}</h1>
+
+    <mat-form-field class="form-input" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" name ="name" [(ngModel)]="name" autocomplete="off">
+    </mat-form-field>
+
+    <mat-form-field class="form-input" appearance="fill">
+      <mat-label>Category</mat-label>
+      <input matInput placeholder="Category" name ="category" value="" [(ngModel)]="category">
+    </mat-form-field>
+
+    <mat-form-field class="form-input" appearance="fill">
+      <mat-label>Account</mat-label>
+      <input matInput placeholder="Account" name ="account" value="" [(ngModel)]="account">
+    </mat-form-field>
+
+    <mat-form-field class="form-input" appearance="fill" type="number">
+      <mat-label>Amount</mat-label>
+      <input matInput type="text" placeholder="Amount" name ="amount" autocomplete="off" [(ngModel)]="amount" NumbersOnly>
+    </mat-form-field>
+
+    <mat-form-field class="forma-date" appearance="fill" for="date">
+      <mat-label>Choose a date</mat-label>
+      <input matInput [matDatepicker]="picker"  [formControl] = "date">
+      <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+      <mat-datepicker #picker ></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button class="add-button" color="primary">{{isEdit?"Update":"Add"}}</button>
+
+  </form>
+  <h2 class="error-class" *ngIf="error!=''">{{error}}</h2>
+  <h2 class="info-class" *ngIf="info!=''">{{info}}</h2>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button class="cancel-button" color="secondary" (click)="hideAddTrans()" (keyup.Escape) ="hideAddTrans()">Cancel</button>
+</div>

@@ -24,4 +24,7 @@ export class BudmanTopbarComponent implements OnInit {
     console.log('dupa')
   }
 
+  themeClick(){
+    this.uiService.toggleDarkTheme()
+  }
 }

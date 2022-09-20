@@ -10,6 +10,8 @@ import { PageEvent } from '@angular/material/paginator'
 import { date } from 'random-js'
 import { DateRange } from '@angular/material/datepicker'
 import { FormControl, FormGroup } from '@angular/forms'
+import { TransactionAddDialogComponent, TransactionDialogData } from './transaction-add-dialog/transaction-add-dialog.component';
+import { MatDialog } from '@angular/material/dialog'
 
 interface Food {
   value: string
@@ -60,8 +62,11 @@ export class BudmanTransactionsPageComponent implements OnInit {
   pageSizeOptions = [5, 10, 25, 50, 100]
   pageEvent!: PageEvent
 
+  dialogdata:TransactionDialogData | undefined;
+
   constructor(private uiService: UiService,
-    private trasactionService: TransactionService
+    private trasactionService: TransactionService,
+    public dialog:MatDialog
   ) {
     this.addTransSub =
       uiService
@@ -102,7 +107,20 @@ export class BudmanTransactionsPageComponent implements OnInit {
   }
 
   onAddTransactionClick() {
-    this.uiService.displayAddTransaction(true)
+
+
+    const dialogRef = this.dialog.open(TransactionAddDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.dialogdata = result;
+    });
+
+    // this.uiService.displayAddTransaction(true)
+
+
   }
 
   getTransactionsToUI() {
@@ -159,16 +177,16 @@ export class BudmanTransactionsPageComponent implements OnInit {
 
   manipulateFilter(str: string) {
     switch (str) {
-      case 'sa':
+      case 'selectAccounts':
         this.accounts.forEach(n => n[1] = true)
         break
-      case 'da':
+      case 'deselectAccounts':
         this.accounts.forEach(n => n[1] = false)
         break
-      case 'sc':
+      case 'selectCategories':
         this.categories.forEach(n => n[1] = true)
         break
-      case 'dc':
+      case 'deselectCategories':
         this.categories.forEach(n => n[1] = false)
         break
     }

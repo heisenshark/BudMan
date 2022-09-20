@@ -1,26 +1,53 @@
-<form class="form-container" (ngSubmit)="logIn()">
-  <mat-form-field class="form-input" appearance="fill">
+<form class="form-container" (ngSubmit)="takeAction()">
+  <h1>
+    <pre>{{ title }}</pre>
+  </h1>
+
+  <mat-form-field
+  *ngIf="state == 1 || state == 2"
+  class="form-input" appearance="fill">
     <mat-label>Login</mat-label>
     <input
       matInput
       placeholder="Login"
       name="login"
       [(ngModel)]="login"
-      autocomplete="off"
+      matInput
     />
   </mat-form-field>
 
-  <mat-form-field class="form-input" appearance="fill">
+  <mat-form-field
+  *ngIf="state == 1 || state == 2"
+  class="form-input" appearance="fill">
     <mat-label>Password</mat-label>
     <input
       matInput
       placeholder="Password"
       name="password"
       value=""
+      autocomplete="off"
       [(ngModel)]="password"
     />
   </mat-form-field>
 
-  <button mat-raised-button class="add-button" color="primary"> LogIn/SignIn</button>
+  <mat-form-field
+  *ngIf="state != 1"
+  class="form-input" appearance="fill">
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      placeholder="email"
+      name="email"
+      value=""
+      [(ngModel)]="email"
+    />
+  </mat-form-field>
 
+  <button mat-raised-button class="add-button" color="primary">
+    LogIn/SignIn
+  </button>
+  <a *ngIf="state != 1" routerLink="/login">Login</a>
+<a *ngIf="state != 2" routerLink="/register">Register</a>
+<a *ngIf="state != 3" routerLink="/forgot">Forgot your Password</a>
 </form>
+

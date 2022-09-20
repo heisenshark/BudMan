@@ -1,9 +1,14 @@
 
-<app-nav-menu></app-nav-menu>
-<app-budman-topbar>
+<div [ngClass] = "getTheme()?'darkMode':''">
+
+<app-nav-menu
+></app-nav-menu>
+<app-budman-topbar *ngIf="!hasRoute('/login') && !hasRoute('/forgot') && !hasRoute('/register')">
 
 </app-budman-topbar>
 
-<router-outlet>
+  <router-outlet >
 
-</router-outlet>
+  </router-outlet>
+
+</div>
