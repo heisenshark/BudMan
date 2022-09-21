@@ -1,4 +1,3 @@
-<h1 mat-dialog-title>{{isEdit?"Edit Transaction":"Add Transaction"}}</h1>
 <div mat-dialog-content>
 
 
@@ -32,7 +31,9 @@
       <mat-datepicker #picker ></mat-datepicker>
     </mat-form-field>
 
-    <button mat-raised-button class="add-button" color="primary">{{isEdit?"Update":"Add"}}</button>
+    <button mat-raised-button class="add-button" color="primary">
+      {{isEdit?"Update":"Add"}}
+    </button>
 
   </form>
   <h2 class="error-class" *ngIf="error!=''">{{error}}</h2>
@@ -41,5 +42,5 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-raised-button class="cancel-button" color="secondary" (click)="hideAddTrans()" (keyup.Escape) ="hideAddTrans()">Cancel</button>
+  <button mat-raised-button class="cancel-button" color="secondary" (click)="onNoClick()">Cancel</button>
 </div>

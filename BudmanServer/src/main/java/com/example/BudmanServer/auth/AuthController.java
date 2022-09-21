@@ -102,5 +102,12 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
+    @GetMapping("/logout")
+    ResponseEntity<?> logOut() {
+        var c = ResponseCookie.from("budman", "").path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, c.toString())
+                .body("");
+
+    }
 
 }

@@ -32,6 +32,7 @@
     "crypto-es": "^1.2.7",
     "json-server": "^0.4.2",
     "moment": "^2.29.4",
+    "ngx-cookie-service": "^14.0.1",
     "random-js": "^2.1.0",
     "rxjs": "~7.5.0",
     "tsc": "^2.0.4",

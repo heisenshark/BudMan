@@ -1,4 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { AuthServiceService } from 'src/app/services/auth-service.service'
 import { UiService } from '../../services/ui.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { UiService } from '../../services/ui.service';
 })
 export class BudmanTopbarComponent implements OnInit {
 
-  constructor(private uiService:UiService) {
+  constructor(private uiService:UiService,
+              private auth:AuthServiceService) {
 
    }
 
@@ -26,5 +28,10 @@ export class BudmanTopbarComponent implements OnInit {
 
   themeClick(){
     this.uiService.toggleDarkTheme()
+  }
+
+  logout(){
+    console.log('dupa')
+    this.auth.logout()
   }
 }

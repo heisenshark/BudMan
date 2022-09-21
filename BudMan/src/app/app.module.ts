@@ -49,15 +49,19 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { httpInterceptorProviders } from './_helpers/http.intreceptor';
 import { TransactionAddDialogComponent } from './components/budman-transactions-page/transaction-add-dialog/transaction-add-dialog.component'
 import {MatDialogModule} from '@angular/material/dialog';
+import { LoginActivate } from './_helpers/LoginActivate'
+import { CookieService } from './services/cookie-service.service';
+import { TransactionActivate } from './_helpers/TransacionActivate'
 
 const appRoutes: Routes = [
-  { path: 'transactions', component: BudmanTransactionsPageComponent },
+  { path: 'transactions', component: BudmanTransactionsPageComponent ,canActivate:[LoginActivate]},
   { path: 'about', component: AboutComponent },
-  { path: 'categories', component: BudmanCategoryPageComponent },
-  { path: 'accounts', component: BudmanAccountPageComponent },
-  { path: 'login', component: LoginPageComponent },
-  { path: 'register', component: LoginPageComponent },
-  { path: 'forgot', component: LoginPageComponent },
+  { path: 'categories', component: BudmanCategoryPageComponent ,canActivate:[LoginActivate]},
+  { path: 'accounts', component: BudmanAccountPageComponent ,canActivate:[LoginActivate]},
+  { path: 'login', component: LoginPageComponent,canActivate:[TransactionActivate] },
+  { path: 'register', component: LoginPageComponent,canActivate:[TransactionActivate]},
+  { path: 'forgot', component: LoginPageComponent,canActivate:[TransactionActivate]},
+  { path: '**', redirectTo:'transactions' },
 ]
 @NgModule({
   declarations: [
@@ -114,7 +118,10 @@ const appRoutes: Routes = [
   ],
   providers: [MatDatepickerModule,
     DatePipe,
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    LoginActivate,
+    TransactionActivate,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })
