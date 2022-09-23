@@ -1,11 +1,11 @@
 <div class="page">
 
-  <app-transaction-add
+  <!-- <app-transaction-add
   *ngIf="showAddTrans"
   (onAddTransaction)="addTransaction($event)"
   (onEditTransaction)="editTransaction($event)"
 
-  ></app-transaction-add>
+  ></app-transaction-add> -->
 
   <div class="filter-section">
 
@@ -54,7 +54,7 @@
           <mat-checkbox #categorycheckbox class="example-margin" color="primary" *ngFor="let item of categories"
           [checked]="item[1]"
           (change)="item[1] = (categorycheckbox.checked)"
-          >{{item[0]}}</mat-checkbox>
+          >{{item[0].name}}</mat-checkbox>
         </div>
 
         <button mat-raised-button color="secondary" (click)="manipulateFilter('selectCategories')">Select All</button>
@@ -68,7 +68,7 @@
           <mat-checkbox #accountcheckbox class="example-margin" color="primary" *ngFor="let item of accounts"
           [checked]="item[1]"
           (change)="item[1] = (accountcheckbox.checked)"
-          >{{item[0]}}</mat-checkbox>
+          >{{item[0].name}}</mat-checkbox>
 
         </div>
 
@@ -101,12 +101,9 @@
         <button (click)="aaa()" >XDDDD</button>
         <app-transaction
           *ngFor="let item of transactionsUI"
-          [Name]="item.name"
-          [Amount]="item.amount"
-          [Category]="item.category"
-          [Account]="item.account.name"
-          [Datee]="item.date"
           [transaction]="item"
+          [Account]="item.account.name"
+          [Category]="item.category.name"
           (onDelete)="deleteTransaction(item)"
           (onEdit)="openEditWindow(item)"
         ></app-transaction>

@@ -3,6 +3,8 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { FormControl } from '@angular/forms'
 import { Transaction } from 'src/app/Transaction'
 import { UiService } from '../../../services/ui.service';
+import { TransactionService } from '../../../services/transaction.service';
+import { CategoryModel, AccountModel } from '../../../_helpers/HelperModels';
 
 export interface TransactionDialogData{
    name: string
@@ -21,23 +23,28 @@ export class TransactionAddDialogComponent implements OnInit {
   @Output() onAddTransaction: EventEmitter<Transaction> = new EventEmitter<Transaction>()
   @Output() onEditTransaction: EventEmitter<Transaction> = new EventEmitter<Transaction>()
 
+
   isEdit = false
   transToEdit!: any
   public name: string = ''
-  public category: string = ''
-  public account: string = ''
+  public category!: CategoryModel
+  public account!: AccountModel
   public amount: string = ''
   date = new FormControl(new Date())
 
   error: string = ''
   info: string = ''
 
+  accounts:AccountModel[] = []
+  categories:CategoryModel[] = []
 
   constructor(
     public dialogRef: MatDialogRef<TransactionAddDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionDialogData,
-    private uiService:UiService
-  ) {}
+    private uiService:UiService,
+    private transactions:TransactionService
+  ) {
+  }
   ngOnInit(): void {
     this.transToEdit = this.uiService.getEdittedTrans()
     if(this.transToEdit == null) return
@@ -50,6 +57,15 @@ export class TransactionAddDialogComponent implements OnInit {
     this.category = trans.category
     this.amount = `${trans.amount}`
     this.date.setValue(trans.date)
+    // this.transactions.getAccounts().subscribe(
+    //   (n)=>{
+    //     this.accounts = n
+    //   }
+    // )
+    // transactions.getUserFull().subscribe(()=>{
+
+    // })
+    console.log('dupa')
   }
 
   onSubmit() {
@@ -63,11 +79,11 @@ export class TransactionAddDialogComponent implements OnInit {
       this.error = 'Please Specify a name'
       return
     }
-    if (this.account == '') {
+    if (this.account == undefined) {
       this.error = 'Please Specify account'
       return
     }
-    if (this.category == '') {
+    if (this.category == undefined) {
       this.error = 'Please Specify category'
       return
     }
@@ -79,11 +95,9 @@ export class TransactionAddDialogComponent implements OnInit {
       amount: +this.amount,
       name: this.name,
       category: this.category,
-      account: {
-        id:"sdfsdf",
-        name:"234",
-      },
-      date: this.date.value
+      account: this.account,
+      date: this.date.value,
+      categoryId:123
     }
 
     if (!this.isEdit) {
@@ -98,7 +112,8 @@ export class TransactionAddDialogComponent implements OnInit {
       this.hideAddTrans()
     }
     this.error = ''
-    this.name = this.amount = this.category = this.account = ''
+    this.name = this.amount = ''
+
     this.date.setValue(new Date())
   }
 

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -107,6 +108,18 @@ public class AuthController {
         var c = ResponseCookie.from("budman", "").path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, c.toString())
                 .body("");
+
+    }
+    @GetMapping("/user")
+    UserInfoResponse getUser() {
+        var userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        return new UserInfoResponse(userDetails.getId(),
+                        userDetails.getUsername(),
+                        roles
+                );
 
     }
 

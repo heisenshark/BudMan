@@ -10,8 +10,9 @@ import { PageEvent } from '@angular/material/paginator'
 import { date } from 'random-js'
 import { DateRange } from '@angular/material/datepicker'
 import { FormControl, FormGroup } from '@angular/forms'
-import { TransactionAddDialogComponent, TransactionDialogData } from './transaction-add-dialog/transaction-add-dialog.component';
+import { TransactionAddDialogComponent, TransactionDialogData } from './transaction-add-dialog/transaction-add-dialog.component'
 import { MatDialog } from '@angular/material/dialog'
+import { CategoryModel, AccountModel } from '../../_helpers/HelperModels';
 
 interface Food {
   value: string
@@ -28,19 +29,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
     'hf'
   ];
 
-  categories: any[] = [
-    ['prawdziwki', true],
-    ['prawdziwki', true],
-    ['prawdziwki', true],
-    ['prawdziwki', true],
-    ['prawdziwki', true],
-    ['prawdziwki', true],
-    ['prawdziwki', true],
-  ];
-  accounts = [
-    ['oszczędnościowe', true],
-    ['debetowe', true],
-  ]
+  categories: [CategoryModel,boolean][] = [];
+  accounts: [AccountModel,boolean][] = [];
   filterError: string | null = null
 
   range: any
@@ -62,11 +52,11 @@ export class BudmanTransactionsPageComponent implements OnInit {
   pageSizeOptions = [5, 10, 25, 50, 100]
   pageEvent!: PageEvent
 
-  dialogdata:TransactionDialogData | undefined;
+  dialogdata: TransactionDialogData | undefined
 
   constructor(private uiService: UiService,
     private trasactionService: TransactionService,
-    public dialog:MatDialog
+    public dialog: MatDialog
   ) {
     this.addTransSub =
       uiService
@@ -79,30 +69,39 @@ export class BudmanTransactionsPageComponent implements OnInit {
     this.categories = []
     this.accounts = []
 
-    this.trasactionService.getTransactions().subscribe(
-      (transactions) => {
-        this.transactions = transactions
-        this.transactionsUI = transactions.slice(0, this.pageSize)
+
+    this.trasactionService.getUserFull().subscribe(
+      x=>{
+        x.accounts.map((acc) => {
+          this.accounts.push([acc, true])
+        })
+        x.categories.map(x=>{
+          this.categories.push([x,true]);
+        })
+
+        this.trasactionService.getTransactions().subscribe(
+          (transactions) => {
+            this.transactions = transactions
+           this.transactions.forEach(x =>{
+              x.category = this.getCategoryById(x.categoryId)
+            })
+            this.transactionsUI = transactions.slice(0, this.pageSize)
+            console.log(transactions)
+          }
+        )
+
       }
     )
 
-    this.trasactionService.getCategories().subscribe(
 
-      (cats) => cats.map(
-        (cat: string) => {
-          this.categories.push([cat, true])
-        }
-      )
+    // this.trasactionService.getAccounts().subscribe(
 
-    )
-    this.trasactionService.getAccounts().subscribe(
+    //   (accs) =>
+    //     accs.map((acc) => {
+    //       this.accounts.push([acc.name, true])
+    //     })
 
-      (accs) =>
-        accs.map((acc: string) => {
-          this.accounts.push([acc, true])
-        })
-
-    )
+    // )
 
   }
 
@@ -111,12 +110,12 @@ export class BudmanTransactionsPageComponent implements OnInit {
 
     const dialogRef = this.dialog.open(TransactionAddDialogComponent, {
       width: '400px',
-    });
+    })
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.dialogdata = result;
-    });
+      console.log('The dialog was closed')
+      this.dialogdata = result
+    })
 
     // this.uiService.displayAddTransaction(true)
 
@@ -143,15 +142,27 @@ export class BudmanTransactionsPageComponent implements OnInit {
     )
   }
   openEditWindow(t: Transaction) {
+    // this.uiService.setEdittedTransaction(t)
+    // this.uiService.displayAddTransaction(true)
     this.uiService.setEdittedTransaction(t)
-    this.uiService.displayAddTransaction(true)
+    const dialogRef = this.dialog.open(TransactionAddDialogComponent, {
+      width: '400px',
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed')
+      this.dialogdata = result
+    })
+
   }
   aaa() {
-  //   this.trasactionService.addTransaction(getRandomTrans(1)[0]).subscribe((trans) => {
-  //     this.transactions.push(trans)
-  //     this.getTransactionsToUI()
-  //   })
-  //   //this.trasactionService.randomShit()
+
+    console.log(this.transactionsUI)
+    //   this.trasactionService.addTransaction(getRandomTrans(1)[0]).subscribe((trans) => {
+    //     this.transactions.push(trans)
+    //     this.getTransactionsToUI()
+    //   })
+    //   //this.trasactionService.randomShit()
   }
   addTransaction(t: Transaction) {
     this.trasactionService.addTransaction(t).subscribe(
@@ -213,10 +224,10 @@ export class BudmanTransactionsPageComponent implements OnInit {
         this.transactions = []
         this.transactions = transs.filter(
           (trans) => {
-            let acc = this.accounts.find((n) => { return n[0] == trans.account.name && n[1] == true })
+            let acc = this.accounts.find((n) => { return n[0].name == trans.account.name && n[0].active == true })
             let cat = this.categories.find((n) => { return n[0] == trans.category && n[1] == true })
-            let td= new Date(trans.date).getTime()
-            console.log(`${acc} ${cat} ${new Date(td).getTime() }`)
+            let td = new Date(trans.date).getTime()
+            console.log(`${acc} ${cat} ${new Date(td).getTime()}`)
             return acc != undefined && cat != undefined
               && (this.dateDisabled ||
                 (td < this.dateRange.value.end.getTime()
@@ -233,12 +244,19 @@ export class BudmanTransactionsPageComponent implements OnInit {
     )
   }
 
-  calculateBalance():number{
+  calculateBalance(): number {
     return this.transactions.reduce(
-      (acc,val)=>{
+      (acc, val) => {
         return acc + val.amount
       }
-      ,0
+      , 0
     )
+  }
+
+  getCategoryById(id:number):CategoryModel{
+    let xd = this.categories.find(x => x[0].id==id)
+    if(xd == undefined)
+      throw new Error("dup");
+    return xd[0]
   }
 }

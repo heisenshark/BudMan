@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
 import { DatePipe } from '@angular/common'
-import { Transaction } from '../../../Transaction';
-import { TransactionService } from '../../../services/transaction.service';
+import { Transaction } from '../../../Transaction'
+import { TransactionService } from '../../../services/transaction.service'
 import { integer } from 'random-js'
 @Component({
   selector: 'app-transaction',
@@ -13,7 +13,7 @@ export class TransactionComponent implements OnInit {
   @Input() Name: string = 'Name'
   @Input() Category: string = 'Category'
   @Input() Account: string = 'Account'
-  @Input() Datee: Date | null= null
+  @Input() Datee: Date | null = null
   @Input() Amount: number | string = 'Amount'
   @Input() IsHeader: boolean = false
   @Input() transaction!: Transaction
@@ -28,18 +28,23 @@ export class TransactionComponent implements OnInit {
   ];
   color!: string
   constructor(private datePipe: DatePipe
-    ) {
+  ) {
     if (typeof this.Datee == "string")
       console.log('dupa')
+
+
   }
 
   ngOnInit(): void {
     this.DateOutput = this.getDate()
     this.color = this.GetColor()
-
+    if (this.transaction == undefined) return
+    //{this.Name,this.Datee,this.Amount } = this.transaction;
+    this.Name = this.transaction.name
+    this.Amount = this.transaction.amount
   }
   GetColor(): string {
-    if( this.Amount >0)return this.BorderColors[1]
+    if (this.Amount > 0) return this.BorderColors[1]
     else return this.BorderColors[0]
     // return this.BorderColors[Math.floor(Math.random() * 2) % 2]
   }

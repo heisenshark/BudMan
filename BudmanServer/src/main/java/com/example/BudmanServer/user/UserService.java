@@ -1,11 +1,10 @@
 package com.example.BudmanServer.user;
 
 import com.example.BudmanServer.Category;
+import com.example.BudmanServer.account.Account;
 import com.example.BudmanServer.account.AccountRepository;
 import com.example.BudmanServer.auth.UserDetailsImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -112,11 +111,19 @@ public class UserService implements UserDetailsService {
     }
 
     public UserAccount findUserById(String id){
-        return userRepository.findById(id).orElse(null);
+        var xd = userRepository.findById(id).orElse(null);
+        if(xd ==null)return null;
+        xd.setPassword("");
+        return xd;
     }
     public UserDetailsImpl findOneById(String id) {
         var u = userRepository.findById(id);
         return u.map(UserDetailsImpl::build).orElse(null);
     }
 
+    public List<Account> getUserAccounts(String id) {
+        if(userRepository.findById(id).isPresent())
+            return userRepository.findById(id).get().getAccounts();
+        return null;
+    }
 }

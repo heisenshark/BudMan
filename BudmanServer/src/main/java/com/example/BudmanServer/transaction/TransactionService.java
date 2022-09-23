@@ -3,6 +3,7 @@ package com.example.BudmanServer.transaction;
 import com.example.BudmanServer.account.AccountRepository;
 import com.example.BudmanServer.user.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

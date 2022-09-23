@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
-import { firstValueFrom, Observable } from 'rxjs';
-import { CookieService } from './cookie-service.service';
-import { Router } from '@angular/router';
+import { firstValueFrom, Observable, concat,mergeMap,switchMap,take } from 'rxjs'
+import { CookieService } from './cookie-service.service'
+import { Router } from '@angular/router'
+import { AccountModel } from '../_helpers/HelperModels'
 
-export interface loggedUser{
-  username:string,
-  id:string
-  roles:string[]
+export interface loggedUser {
+  username: string,
+  id: string
+  roles: string[]
 }
 
 const httpOptions = {
@@ -27,9 +28,11 @@ export class AuthServiceService {
   currentUser!: loggedUser
 
   constructor(private http: HttpClient,
-              private cookie:CookieService,
-              private router:Router
-    ) { }
+    private cookie: CookieService,
+    private router: Router
+  ) {
+    this.getUser().subscribe(x=>this.currentUser = x)
+  }
 
   public signIn(login: string, password: string) {
 
@@ -42,14 +45,14 @@ export class AuthServiceService {
     ).
       subscribe(
         {
-          next:(n)=>{
-            this.cookie.setCookie({name:"logged",value:"true"})
+          next: (n) => {
+            this.cookie.setCookie({ name: "logged", value: "true" })
             this.router.navigateByUrl("/transactions")
             this.currentUser = n as loggedUser
             console.log(this.currentUser)
           },
-          error:()=>{
-            this.cookie.setCookie({name:"logged",value:"false"})
+          error: () => {
+            this.cookie.setCookie({ name: "logged", value: "false" })
           }
         }
       )
@@ -59,21 +62,21 @@ export class AuthServiceService {
 
   }
 
-  public register (login: string, password: string,email:string):Observable<any> {
-    return  this.http.post<Object>(`${this.apiUrl}/signup`,
+  public register(login: string, password: string, email: string): Observable<any> {
+    return this.http.post<Object>(`${this.apiUrl}/signup`,
       {
         "username": login,
         "password": password,
-        "email":email
+        "email": email
       },
       httpOptions
     )
   }
-  public logout () {
-    this.http.get(`${this.apiUrl}/logout`).subscribe(()=>{})
-    this.cookie.setCookie({name:"logged",value:"false"})
+  public logout() {
+    this.http.get(`${this.apiUrl}/logout`).subscribe(() => { })
+    this.cookie.setCookie({ name: "logged", value: "false" })
     this.router.navigateByUrl("/login")
-    this.currentUser = {id:"",username:"",roles:[]}
+    this.currentUser = { id: "", username: "", roles: [] }
   }
 
   public getCookie(name: string) {
@@ -92,8 +95,26 @@ export class AuthServiceService {
     return ''
   }
 
-  isLoggedIn () :boolean{
-    return this.cookie.getCookie("logged") =="true"
+  public getUser(): Observable<loggedUser> {
+    return this.http.get<loggedUser>(`${this.apiUrl}/user`)
+    //this.http.get<AccountModel[]>('localhost:8080/api/v1/users/631c9ad60962f2743489ba61/account/').subscribe(x=>console.log(x))
+
+    // xd.pipe((n) => {
+    //   n.subscribe(
+    //     n => {
+    //       this.currentUser = n as loggedUser
+    //       console.log(this.currentUser)
+    //     }
+    //   )
+    //   return n
+    // })
+    // return xd
+  }
+
+
+
+  isLoggedIn(): boolean {
+    return this.cookie.getCookie("logged") == "true"
   }
 
 }

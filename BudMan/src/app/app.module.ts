@@ -39,7 +39,6 @@ import { AddTaskComponent } from './components/tasks-manager/add-task/add-task.c
 import { RouterModule, Routes } from '@angular/router'
 import { AboutComponent } from './components/tasks-manager/about/about.component'
 import { TransactionButtonComponent } from './components/budman-transactions-page/transaction-button/transaction-button.component'
-import { TransactionAddComponent } from './components/budman-transactions-page/transaction-add/transaction-add.component'
 import { NumbersOnlyDirective } from './directives/numbers-only.directive'
 import { VignetteComponent } from './components/vignette/vignette.component'
 import { DatePipe } from '@angular/common';
@@ -85,7 +84,6 @@ const appRoutes: Routes = [
     AddTaskComponent,
     AboutComponent,
     TransactionButtonComponent,
-    TransactionAddComponent,
     NumbersOnlyDirective,
     VignetteComponent,
     BudmanCategoryPageComponent,
