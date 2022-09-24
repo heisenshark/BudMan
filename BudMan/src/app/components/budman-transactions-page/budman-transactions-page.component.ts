@@ -29,8 +29,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
     'hf'
   ];
 
-  categories: [CategoryModel,boolean][] = [];
-  accounts: [AccountModel,boolean][] = [];
+  public categories: [CategoryModel,boolean][] = [];
+  public accounts: [AccountModel,boolean][] = [];
   filterError: string | null = null
 
   range: any
@@ -113,7 +113,9 @@ export class BudmanTransactionsPageComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed')
+      this.uiService.clearEdittedTrans()
+      console.log(this.uiService.getEdittedTrans())
+      //console.log('The dialog was closed')
       this.dialogdata = result
     })
 
@@ -151,6 +153,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed')
+      this.uiService.clearEdittedTrans()
+      console.log(this.uiService.getEdittedTrans())
       this.dialogdata = result
     })
 

@@ -1,10 +1,10 @@
 import { Observable, of, concat,switchMap,map ,catchError,tap,takeLast} from 'rxjs';
 import { HttpClient,HttpHeaders} from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Transaction } from '../Transaction';
 // import { getRandomTrans } from '../mock-data'
 import { AuthServiceService } from './auth-service.service';
-import { AccountModel, UserModel } from '../_helpers/HelperModels';
+import { AccountModel, UserModel, CategoryModel } from '../_helpers/HelperModels';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -17,23 +17,57 @@ const httpOptions2 = {
   })
 }
 
+
+
+
 @Injectable({
   providedIn: 'root'
 })
-export class TransactionService {
+export class TransactionService implements OnInit{
   private apiUrl = "http://localhost:8080/api/v1/transactions/"
   private apiUrl_acc = "http://localhost:8080/api/v1/users/"
   private apiUrl_cat = "http://localhost:5000/categories"
-
+  accounts: AccountModel[] =[]
+  categories: CategoryModel[] =[]
+  userid:string = ""
   constructor(private http:HttpClient,
-    private auth:AuthServiceService) { }
+    private auth:AuthServiceService) {
 
+      this.getUserFull().subscribe(
+        x=>{
+          this.accounts = x.accounts
+          this.categories = x.categories
+          this.userid = x.id
+          console.log(x)
+        }
+      )
+
+
+    }
+
+  ngOnInit(): void {
+      this.getUserFull().subscribe(
+        x=>{
+          this.accounts = x.accounts
+          this.categories = x.categories
+          console.log(x)
+        }
+      )
+  }
 
   getTransactions():Observable<Transaction[]>{
     return this.http.get<Transaction[]>(this.apiUrl)
   }
   addTransaction(trans:Transaction):Observable<Transaction>{
-    return this.http.post<Transaction>(this.apiUrl,trans,httpOptions)
+    return this.http.put<Transaction>(this.apiUrl_acc+`${this.userid}/account/${trans.account.id}/add`,
+    {
+      "amount": trans.amount,
+      "name": trans.name,
+      "account": trans.account.id,
+      "date": trans.date,
+      "categoryId": trans.categoryId
+    }
+    ,httpOptions)
   }
 
   deleteTransaction(index:string):Observable<Transaction>{

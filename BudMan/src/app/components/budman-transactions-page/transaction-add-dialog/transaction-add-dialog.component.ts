@@ -1,10 +1,11 @@
-import { Component, EventEmitter, OnInit, Output ,Inject} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output ,Inject, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { FormControl } from '@angular/forms'
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Transaction } from 'src/app/Transaction'
 import { UiService } from '../../../services/ui.service';
 import { TransactionService } from '../../../services/transaction.service';
 import { CategoryModel, AccountModel } from '../../../_helpers/HelperModels';
+import { BudmanTransactionsPageComponent } from '../budman-transactions-page.component';
 
 export interface TransactionDialogData{
    name: string
@@ -22,7 +23,7 @@ export class TransactionAddDialogComponent implements OnInit {
 
   @Output() onAddTransaction: EventEmitter<Transaction> = new EventEmitter<Transaction>()
   @Output() onEditTransaction: EventEmitter<Transaction> = new EventEmitter<Transaction>()
-
+  transactionGroup!: FormGroup;
 
   isEdit = false
   transToEdit!: any
@@ -38,25 +39,64 @@ export class TransactionAddDialogComponent implements OnInit {
   accounts:AccountModel[] = []
   categories:CategoryModel[] = []
 
+  accountSelected!:AccountModel
   constructor(
     public dialogRef: MatDialogRef<TransactionAddDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionDialogData,
     private uiService:UiService,
-    private transactions:TransactionService
-  ) {
+    private transactions:TransactionService,
+    private fb: FormBuilder ) {
+
+
+      this.transactionGroup = new FormGroup({
+        category: new FormControl(),
+        account: new FormControl(),
+        date: new FormControl(),
+        amount:new FormControl(),
+        name:new FormControl()
+      })
+
   }
   ngOnInit(): void {
+    console.log('dialog opened init ')
+    this.isEdit= false
+    this.accounts = this.transactions.accounts
+    this.categories = this.transactions.categories
+    console.log(this.uiService.getEdittedTrans())
     this.transToEdit = this.uiService.getEdittedTrans()
     if(this.transToEdit == null) return
     this.isEdit=true
     console.log(this.transToEdit)
     console.log('dupa')
     let trans = (this.transToEdit as Transaction)
+
     //this.account = trans.account
     this.name = trans.name
-    this.category = trans.category
-    this.amount = `${trans.amount}`
-    this.date.setValue(trans.date)
+
+
+    this.transactionGroup = this.fb.group({
+      category: [null,Validators.required],
+      account: [null,Validators.required],
+      date: new FormControl(trans.date),
+      amount:new FormControl(trans.amount),
+      name:new FormControl(trans.name)
+    })
+
+
+    //this.category = trans.category
+
+    const toSelect = this.categories.find(c => c.id == trans.category.id);
+    this.transactionGroup.controls['category'].setValue(toSelect);
+
+    const acc = this.accounts.find(c => c.id == trans.account.id);
+    this.transactionGroup.controls['account'].setValue(acc);
+
+    //console.log(this.category)
+    //this.amount = `${trans.amount}`
+    //this.date.setValue(trans.date)
+
+
+    // this.patientCategory.get('patientCategory').setValue(toSelect);
     // this.transactions.getAccounts().subscribe(
     //   (n)=>{
     //     this.accounts = n
@@ -69,39 +109,23 @@ export class TransactionAddDialogComponent implements OnInit {
   }
 
   onSubmit() {
+
+    console.table([this.transactionGroup.value])
+
     this.info = ''
     this.amount = this.amount.toString().replace(',', '.')
-    if (this.amount == undefined || +this.amount == 0) {
-      this.error = 'Please Specify amount'
-      return
-    }
-    if (this.name == '') {
-      this.error = 'Please Specify a name'
-      return
-    }
-    if (this.account == undefined) {
-      this.error = 'Please Specify account'
-      return
-    }
-    if (this.category == undefined) {
-      this.error = 'Please Specify category'
-      return
-    }
-    if (this.date.value == null) {
-      this.error = 'Something went wrong'
-      return
-    }
+
     let  t :Transaction= {
-      amount: +this.amount,
-      name: this.name,
-      category: this.category,
-      account: this.account,
-      date: this.date.value,
-      categoryId:123
+      amount: +this.transactionGroup.get('amount')?.value,
+      name: this.transactionGroup.get('name')?.value,
+      category: this.transactionGroup.get('category')?.value,
+      account: this.transactionGroup.get('account')?.value,
+      date: this.transactionGroup.get('date')?.value,
+      categoryId: (this.transactionGroup.get('category')?.value as CategoryModel).id
     }
 
     if (!this.isEdit) {
-      this.onAddTransaction.emit(t)
+      this.transactions.addTransaction(t).subscribe()
       this.info = 'Transaction Added'
     }
     else {
@@ -124,5 +148,10 @@ export class TransactionAddDialogComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   }
-
+  getAccs(){
+    return this.transactions.accounts
+  }
+  getCats(){
+    return this.transactions.categories.filter(x=>x.status==true)
+  }
 }

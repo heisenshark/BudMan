@@ -9,7 +9,7 @@ export interface AccountModel{
 export interface CategoryModel{
   id:number,
   name:string,
-  active:boolean
+  status:boolean
 }
 
 export interface UserModel{
