@@ -26,7 +26,6 @@ const httpOptions2 = {
 export class TransactionService implements OnInit{
   private apiUrl = "http://localhost:8080/api/v1/transactions/"
   private apiUrl_acc = "http://localhost:8080/api/v1/users/"
-  // private apiUrl_cat = "http://localhost:5000/categories"
 
   onAddTrans: Subject<Transaction> = new Subject<Transaction>()
   onEditTrans: Subject<Transaction> = new Subject<Transaction>()
@@ -37,7 +36,7 @@ export class TransactionService implements OnInit{
   constructor(private http:HttpClient,
     private auth:AuthServiceService) {
 
-      this.getUserFull().subscribe(
+      this.getFullUser().subscribe(
         x=>{
           this.accounts = x.accounts
           this.categories = x.categories
@@ -49,7 +48,7 @@ export class TransactionService implements OnInit{
     }
 
   ngOnInit(): void {
-      this.getUserFull().subscribe(
+      this.getFullUser().subscribe(
         x=>{
           this.accounts = x.accounts
           this.categories = x.categories
@@ -88,17 +87,10 @@ export class TransactionService implements OnInit{
       "date": trans.date,
       "categoryId": trans.categoryId
     }
-,httpOptions)
+    ,httpOptions)
   }
-  // randomShit(){
-  //   let xd = getRandomTrans(100)
-  //   this.http.post<Transaction[]>(this.apiUrl, xd, httpOptions)
-  // }
-
-  //category related stuff
 
   getAccounts():Observable<AccountModel[]>{
-    console.log('accounts get')
     let firstReq = this.auth.getUser();
     let nxtrq = firstReq.pipe(
       switchMap((res1) => res1 != undefined
@@ -112,11 +104,8 @@ export class TransactionService implements OnInit{
     return nxtrq;
   }
   getCategories():Observable<AccountModel[]>{
-
-
-    console.log('accounts get')
-    let firstReq = this.auth.getUser();
-    let nxtrq = firstReq.pipe(
+    let firstRequest = this.auth.getUser();
+    let nextRequest = firstRequest.pipe(
       switchMap((res1) => res1 != undefined
         ? this.http.get<AccountModel[]>(this.apiUrl_acc + `${res1.id}/account/`).pipe(
           map((res2) => res2 ),
@@ -125,12 +114,9 @@ export class TransactionService implements OnInit{
         : of()
       )
     )
-    return nxtrq;
+    return nextRequest;
   }
-
-
-  getUserFull(): Observable<UserModel>{
-    console.log('accounts get')
+  getFullUser(): Observable<UserModel>{
     let firstReq = this.auth.getUser();
     let nxtrq = firstReq.pipe(
       switchMap((res1) => res1 != undefined

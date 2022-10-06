@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { UiService } from '../../services/ui.service'
-import { Subscription, Observable } from 'rxjs'
+import { Subscription, Observable, switchMap} from 'rxjs'
 import { TransactionService } from 'src/app/services/transaction.service'
 import { Transaction } from '../../Transaction'
-import { TaskServiceService } from '../../services/task-service.service'
 // import { getRandomTrans } from '../../mock-data'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { PageEvent } from '@angular/material/paginator'
@@ -61,13 +60,12 @@ export class BudmanTransactionsPageComponent implements OnInit {
     this.addTransSub =
       uiService
         .onToggleAddTransaction()
-        .subscribe(val => this.showAddTrans = val)
+        .subscribe(val => {
+          console.log('dupa')
+          this.showAddTrans = val})
   }
 
   ngOnInit(): void {
-    this.categories = []
-    this.accounts = []
-
     this.trasactionService.onAddTrans.subscribe(
       n=>{
         console.log('dupa')
@@ -86,15 +84,17 @@ export class BudmanTransactionsPageComponent implements OnInit {
         this.getTransactionsToUI()
       }
     )
-    this.trasactionService.getUserFull().subscribe(
-      x=>{
-        x.accounts.map((acc) => {
-          this.accounts.push([acc, true])
-        })
-        x.categories.map(x=>{
-          this.categories.push([x,true]);
-        })
 
+    this.trasactionService.getFullUser().subscribe(
+      x=>{
+        this.accounts = x.accounts.map((acc) => [acc, true])
+        this.categories = x.categories.map(x=>[x,true])
+        // x.accounts.map((acc) => {
+        //   this.accounts.push([acc, true])
+        // })
+        // x.categories.map(x=>{
+        //   this.categories.push([x,true]);
+        // })
         this.trasactionService.getTransactions().subscribe(
           (transactions) => {
             this.transactions = transactions
@@ -109,21 +109,9 @@ export class BudmanTransactionsPageComponent implements OnInit {
       }
     )
 
-
-    // this.trasactionService.getAccounts().subscribe(
-
-    //   (accs) =>
-    //     accs.map((acc) => {
-    //       this.accounts.push([acc.name, true])
-    //     })
-
-    // )
-
   }
 
   onAddTransactionClick() {
-
-
     const dialogRef = this.dialog.open(TransactionAddDialogComponent, {
       width: '400px',
     })
@@ -131,12 +119,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.uiService.clearEdittedTrans()
       console.log(this.uiService.getEdittedTrans())
-      //console.log('The dialog was closed')
       this.dialogdata = result
     })
-
-    // this.uiService.displayAddTransaction(true)
-
 
   }
 
