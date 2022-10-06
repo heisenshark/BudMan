@@ -48,7 +48,7 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    @PutMapping("/{id}/category/add")
+    @PutMapping("/{id}/category/add/")
     @PreAuthorize("authentication.principal.getId().equals(#id)")
     Optional<UserAccount> deleteUserCategory(@PathVariable String id, String category) {
         return userService.addUserCategory(id, category);
@@ -96,16 +96,16 @@ public class UserController {
         return transactionService.addTransaction(id, accountId, transaction);
     }
 
-    @PutMapping("/{id}/{accountId}/delete")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    String deleteTransaction(@PathVariable String id, @PathVariable String accountId, String transactionId) {
-        return transactionService.deleteTransaction(id, accountId, transactionId);
+    @DeleteMapping("/transactions/delete/{transactionId}")
+    @PreAuthorize("@securityService.CanTransDelete(authentication.principal.getId(),#transactionId)")
+    String deleteTransaction( @PathVariable String transactionId) {
+        return transactionService.deleteTransaction(transactionId);
     }
 
     @PutMapping("/{id}/{accountId}/update")
     @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<Transaction> updateTransaction(@PathVariable String id, @PathVariable String accountId, String transactionId, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, accountId, transactionId, transaction);
+    Optional<Transaction> updateTransaction(@PathVariable String id, @PathVariable String accountId, @RequestBody Transaction transaction) {
+        return transactionService.updateTransaction(id, accountId, transaction);
     }
 
 }

@@ -3,7 +3,6 @@ package com.example.BudmanServer.transaction;
 import com.example.BudmanServer.account.AccountRepository;
 import com.example.BudmanServer.user.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,25 +30,28 @@ public class TransactionService {
 
         return Optional.of(transaction);
     }
-    public String deleteTransaction(String id, String accountId, String transactionId) {
-        var user = userRepository.findById(id);
-        var account = accountRepository.findById(accountId);
-        var transaction = transactionRepository.findById(transactionId);
-        if(user.isEmpty()
-                || account.isEmpty()
-                || transaction.isEmpty()
-                || user.get().getAccounts().stream().noneMatch(n ->n.getId().equals(accountId))
-                || !transaction.get().getAccount().getId().equals(accountId)
-        ) return "";
-
+    public String deleteTransaction( String transactionId) {
         transactionRepository.deleteById(transactionId);
         return transactionId;
+
+//        var user = userRepository.findById(id);
+//        var account = accountRepository.findById(accountId);
+//        var transaction = transactionRepository.findById(transactionId);
+//        if(user.isEmpty()
+//                || account.isEmpty()
+//                || transaction.isEmpty()
+//                || user.get().getAccounts().stream().noneMatch(n ->n.getId().equals(accountId))
+//                || !transaction.get().getAccount().getId().equals(accountId)
+//        ) return "";
+//
+//        transactionRepository.deleteById(transactionId);
+//        return transactionId;
     }
 
-    public  Optional<Transaction> updateTransaction(String id, String accountId,String transactionId, Transaction transaction) {
+    public  Optional<Transaction> updateTransaction(String id, String accountId, Transaction transaction) {
         var user = userRepository.findById(id);
         var account = accountRepository.findById(accountId);
-        var transBefore = transactionRepository.findById(transactionId);
+        var transBefore = transactionRepository.findById(transaction.getId());
         if(user.isEmpty()
                 || account.isEmpty()
                 || transBefore.isEmpty()
@@ -87,4 +89,7 @@ public class TransactionService {
                 );
     }
 
+    public Optional<Transaction> findById(String id) {
+        return transactionRepository.findById(id);
+    }
 }

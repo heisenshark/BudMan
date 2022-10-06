@@ -62,14 +62,30 @@ export class BudmanTransactionsPageComponent implements OnInit {
       uiService
         .onToggleAddTransaction()
         .subscribe(val => this.showAddTrans = val)
-
   }
 
   ngOnInit(): void {
     this.categories = []
     this.accounts = []
 
+    this.trasactionService.onAddTrans.subscribe(
+      n=>{
+        console.log('dupa')
+        console.log(n.id)
+        this.transactions.push(n)
+        this.getTransactionsToUI()
+      }
+    )
 
+    this.trasactionService.onEditTrans.subscribe(
+      t=>{
+        this.transactions.forEach( x => {
+          if(x.id===t.id)
+            Object.assign(x,t)
+        })
+        this.getTransactionsToUI()
+      }
+    )
     this.trasactionService.getUserFull().subscribe(
       x=>{
         x.accounts.map((acc) => {
@@ -136,9 +152,10 @@ export class BudmanTransactionsPageComponent implements OnInit {
 
   deleteTransaction(t: Transaction) {
     if (t.id == undefined) return
-    this.trasactionService.deleteTransaction(t.id).subscribe(
-      () => {
-        this.transactions = this.transactions.filter(trans => trans.id != t.id)
+    this.trasactionService.deleteTransaction(t).subscribe(
+      (trans) => {
+        console.log(trans)
+        this.transactions = this.transactions.filter(tt => tt.id != t.id)
         this.getTransactionsToUI()
       }
     )
@@ -171,6 +188,7 @@ export class BudmanTransactionsPageComponent implements OnInit {
   addTransaction(t: Transaction) {
     this.trasactionService.addTransaction(t).subscribe(
       tr => {
+        console.log(tr)
         this.transactions.push(tr)
         this.getTransactionsToUI()
       }

@@ -127,17 +127,19 @@ export class TransactionAddDialogComponent implements OnInit {
     if (!this.isEdit) {
       this.transactions.addTransaction(t).subscribe()
       this.info = 'Transaction Added'
+      this.transactions.onAddTrans.next(t)
     }
     else {
+      console.log('dupa')
       t.id = this.transToEdit.id
-      this.onEditTransaction.emit(t)
+      this.transactions.updateTransaction(t).subscribe()
+      this.transactions.onEditTrans.next(t)
       this.info = 'Transaction Editted'
       this.uiService.clearEdittedTrans()
       this.hideAddTrans()
     }
     this.error = ''
     this.name = this.amount = ''
-
     this.date.setValue(new Date())
   }
 

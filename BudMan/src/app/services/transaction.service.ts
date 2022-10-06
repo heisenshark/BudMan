@@ -1,4 +1,4 @@
-import { Observable, of, concat,switchMap,map ,catchError,tap,takeLast} from 'rxjs';
+import { Observable, of, concat,switchMap,map ,catchError,tap,takeLast, Subject} from 'rxjs';
 import { HttpClient,HttpHeaders} from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Transaction } from '../Transaction';
@@ -26,7 +26,11 @@ const httpOptions2 = {
 export class TransactionService implements OnInit{
   private apiUrl = "http://localhost:8080/api/v1/transactions/"
   private apiUrl_acc = "http://localhost:8080/api/v1/users/"
-  private apiUrl_cat = "http://localhost:5000/categories"
+  // private apiUrl_cat = "http://localhost:5000/categories"
+
+  onAddTrans: Subject<Transaction> = new Subject<Transaction>()
+  onEditTrans: Subject<Transaction> = new Subject<Transaction>()
+
   accounts: AccountModel[] =[]
   categories: CategoryModel[] =[]
   userid:string = ""
@@ -41,7 +45,6 @@ export class TransactionService implements OnInit{
           console.log(x)
         }
       )
-
 
     }
 
@@ -70,14 +73,22 @@ export class TransactionService implements OnInit{
     ,httpOptions)
   }
 
-  deleteTransaction(index:string):Observable<Transaction>{
-    const url = `${this.apiUrl}/${index}`
-    return this.http.delete<Transaction>(url)
+  deleteTransaction(trans:Transaction){
+    const url = `${this.apiUrl_acc}transactions/delete/${trans.id}`
+    return this.http.delete(url,{responseType:'text'})
   }
   updateTransaction(trans:Transaction){
     console.log(`${trans.id}`)
-    const url = `${this.apiUrl}/${trans.id}`
-    return this.http.put<Transaction>(url,trans,httpOptions)
+    const url = `${this.apiUrl_acc}${this.userid}/${trans.account.id}/update`
+    return this.http.put<Transaction>(url,    {
+      "id":trans.id,
+      "amount": trans.amount,
+      "name": trans.name,
+      "account": trans.account.id,
+      "date": trans.date,
+      "categoryId": trans.categoryId
+    }
+,httpOptions)
   }
   // randomShit(){
   //   let xd = getRandomTrans(100)
@@ -87,8 +98,6 @@ export class TransactionService implements OnInit{
   //category related stuff
 
   getAccounts():Observable<AccountModel[]>{
-
-
     console.log('accounts get')
     let firstReq = this.auth.getUser();
     let nxtrq = firstReq.pipe(
