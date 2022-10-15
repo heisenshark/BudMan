@@ -7,6 +7,7 @@ import com.example.BudmanServer.transaction.TransactionService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
@@ -43,69 +44,35 @@ public class UserController {
 //        return userService.addUser(login,password);
 //    }
     @GetMapping("/{id}")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
     UserAccount getUser(@PathVariable String id) {
         return userService.findUserById(id);
     }
 
-    @PutMapping("/{id}/category/add/")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<UserAccount> deleteUserCategory(@PathVariable String id, String category) {
-        return userService.addUserCategory(id, category);
+    @PutMapping("/categories/add/")
+    Optional<UserAccount> deleteUserCategory(@RequestParam String category) {
+        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(xd==null)
+            return Optional.empty();
+        return userService.addUserCategory(xd.getId(), category);
     }
 
-    @PutMapping("/{id}/category/delete")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<UserAccount> deleteUserCategory(@PathVariable String id, Integer category) {
-        return userService.deleteUserCategory(id, category);
+    @PutMapping("/categories/delete/{category}")
+    Optional<UserAccount> deleteUserCategory(@PathVariable Integer category) {
+        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(xd==null)
+            return Optional.empty();
+        return userService.deleteUserCategory(xd.getId(), category);
     }
 
-    @PutMapping("/{id}/category/modify")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<UserAccount> updateUserCategory(@PathVariable String id, Integer category, String categoryName) {
-        return userService.updateUserCategory(id, category, categoryName);
+    @PutMapping("/categories/update")
+    Optional<UserAccount> updateUserCategory( Integer category, String categoryName) {
+        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(xd==null)
+            return Optional.empty();
+        return userService.updateUserCategory(xd.getId(), category, categoryName);
     }
 
-    @GetMapping("/{id}/account/")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    List<Account> getUserAccounts(@PathVariable String id) {
-        return userService.getUserAccounts(id);
-    }
 
-    @PutMapping("/{id}/account/add")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<UserAccount> addUserAccount(@PathVariable String id, @RequestParam @NonNull @NotBlank String account) {
-        return accountService.addUserAccount(id, account);
-    }
 
-    @PutMapping("/{id}/account/delete")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<UserAccount> deleteUserAccount(@PathVariable String id, String accountId) {
-        return accountService.deleteUserAccount(id, accountId);
-    }
-
-    @PutMapping("/{id}/account/update")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<UserAccount> updateUserAccount(@PathVariable String id, String accountId, String accountName) {
-        return accountService.updateUserAccount(id, accountId, accountName);
-    }
-
-    @PutMapping("/{id}/account/{accountId}/add")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<Transaction> addTransaction(@PathVariable String id, @PathVariable String accountId, @RequestBody Transaction transaction) {
-        return transactionService.addTransaction(id, accountId, transaction);
-    }
-
-    @DeleteMapping("/transactions/delete/{transactionId}")
-    @PreAuthorize("@securityService.CanTransDelete(authentication.principal.getId(),#transactionId)")
-    String deleteTransaction( @PathVariable String transactionId) {
-        return transactionService.deleteTransaction(transactionId);
-    }
-
-    @PutMapping("/{id}/{accountId}/update")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
-    Optional<Transaction> updateTransaction(@PathVariable String id, @PathVariable String accountId, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, accountId, transaction);
-    }
 
 }

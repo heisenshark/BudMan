@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
     public UserAccount updateUser(String userId, String login, String password) {
         var user = userRepository.findById(userId);
         user.ifPresent((u)->{
-            u.setLogin(login);
+            u.setUsername(login);
             u.setPassword(password);
             userRepository.save(u);
         });
@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
     }
 
     public String addUser(String login, String password) {
-        if(userRepository.findUserByLogin(login).isPresent())
+        if(userRepository.findUserByUsername(login).isPresent())
         {
             System.out.println("couldn't add user with login "+login);
             return "";
@@ -59,7 +59,7 @@ public class UserService implements UserDetailsService {
                     else cat.ifPresent((n) -> {n.setStatus(true);});
                     u.setCategories(v);
                     userRepository.save(u);
-                    System.out.println("added category "+ category+" to user "+u.getLogin()+".");
+                    System.out.println("added category "+ category+" to user "+u.getUsername()+".");
                 },
                 () -> {
                     System.out.println("user of Id "+userId+" does not exist,");
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
                     if(cat!=null)cat.setStatus(false);
                     u.setCategories(v);
                     userRepository.save(u);
-                    System.out.println("deleted category "+ cat +"  from user  "+u.getLogin()+".");
+                    System.out.println("deleted category "+ cat +"  from user  "+u.getUsername()+".");
                 },
                 () -> {
                     System.out.println("user of Id "+userId+" does not exist,");
@@ -94,7 +94,7 @@ public class UserService implements UserDetailsService {
                     if(cat!=null)cat.setName(categoryName);
                     u.setCategories(v);
                     userRepository.save(u);
-                    System.out.println("deleted category "+ cat +"  from user  "+u.getLogin()+".");
+                    System.out.println("deleted category "+ cat +"  from user  "+u.getUsername()+".");
                 },
                 () -> {
                     System.out.println("user of Id "+userId+" does not exist,");
@@ -104,7 +104,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsername(String username) {
-        var user = userRepository.findUserByLogin(username)
+        var user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
         return UserDetailsImpl.build(user);

@@ -66,6 +66,25 @@ export class BudmanTransactionsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.trasactionService.getFullUser().subscribe(
+      x=>{
+        this.accounts = x.accounts.map((acc) => [acc, true])
+        this.categories = x.categories.map(x=>[x,true])
+
+        this.trasactionService.getTransactions().subscribe(
+          (transactions) => {
+            this.transactions = transactions
+           this.transactions.forEach(x =>{
+              x.category = this.getCategoryById(x.categoryId)
+            })
+            this.transactionsUI = transactions.slice(0, this.pageSize)
+            console.log(transactions)
+          }
+        )
+
+      }
+    )
+
     this.trasactionService.onAddTrans.subscribe(
       n=>{
         console.log('dupa')
@@ -84,31 +103,6 @@ export class BudmanTransactionsPageComponent implements OnInit {
         this.getTransactionsToUI()
       }
     )
-
-    this.trasactionService.getFullUser().subscribe(
-      x=>{
-        this.accounts = x.accounts.map((acc) => [acc, true])
-        this.categories = x.categories.map(x=>[x,true])
-        // x.accounts.map((acc) => {
-        //   this.accounts.push([acc, true])
-        // })
-        // x.categories.map(x=>{
-        //   this.categories.push([x,true]);
-        // })
-        this.trasactionService.getTransactions().subscribe(
-          (transactions) => {
-            this.transactions = transactions
-           this.transactions.forEach(x =>{
-              x.category = this.getCategoryById(x.categoryId)
-            })
-            this.transactionsUI = transactions.slice(0, this.pageSize)
-            console.log(transactions)
-          }
-        )
-
-      }
-    )
-
   }
 
   onAddTransactionClick() {
@@ -145,8 +139,6 @@ export class BudmanTransactionsPageComponent implements OnInit {
     )
   }
   openEditWindow(t: Transaction) {
-    // this.uiService.setEdittedTransaction(t)
-    // this.uiService.displayAddTransaction(true)
     this.uiService.setEdittedTransaction(t)
     const dialogRef = this.dialog.open(TransactionAddDialogComponent, {
       width: '400px',
@@ -159,15 +151,6 @@ export class BudmanTransactionsPageComponent implements OnInit {
       this.dialogdata = result
     })
 
-  }
-  aaa() {
-
-    console.log(this.transactionsUI)
-    //   this.trasactionService.addTransaction(getRandomTrans(1)[0]).subscribe((trans) => {
-    //     this.transactions.push(trans)
-    //     this.getTransactionsToUI()
-    //   })
-    //   //this.trasactionService.randomShit()
   }
   addTransaction(t: Transaction) {
     this.trasactionService.addTransaction(t).subscribe(
@@ -209,28 +192,12 @@ export class BudmanTransactionsPageComponent implements OnInit {
     }
   }
   filterTransactions() {
-    // if (Math.random() > 0.7) this.filterError = "erorrTest"
-    // if(this.accounts.find((n) => { return n[1] == true }) == undefined)
-    //   {
-    //     this.filterError = "Select at least one account"
-    //     return
-    //   }
-    // if(this.categories.find((n) => { return n[1] == true }) == undefined)
-    //   {
-    //     this.filterError = "Select at least one category"
-    //     return
-    //   }
-    // if(!this.dateDisabled&&(this.dateRange.value.end == null || this.dateRange.value.start ==null) )
-    //   {
-    //     this.filterError = "Select a valid data range"
-    //     return
-    //   }
     this.trasactionService.getTransactions().subscribe(
       (transs) => {
         this.transactions = []
         this.transactions = transs.filter(
           (trans) => {
-            let acc = this.accounts.find((n) => { return n[0].name == trans.account.name && n[0].active == true })
+            let acc = this.accounts.find((n) => { return n[0].id == trans.account && n[0].active == true })
             let cat = this.categories.find((n) => { return n[0] == trans.category && n[1] == true })
             let td = new Date(trans.date).getTime()
             console.log(`${acc} ${cat} ${new Date(td).getTime()}`)
@@ -251,12 +218,13 @@ export class BudmanTransactionsPageComponent implements OnInit {
   }
 
   calculateBalance(): number {
-    return this.transactions.reduce(
-      (acc, val) => {
-        return acc + val.amount
-      }
-      , 0
-    )
+    // return this.transactions.reduce(
+    //   (acc, val) => {
+    //     return acc + val.amount
+    //   }
+    //   , 0
+    // )
+    return 0
   }
 
   getCategoryById(id:number):CategoryModel{

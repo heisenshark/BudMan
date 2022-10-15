@@ -98,11 +98,10 @@
 
       </div>
       <div class="transactions-view">
-        <button (click)="aaa()" >XDDDD</button>
         <app-transaction
           *ngFor="let item of transactionsUI"
           [transaction]="item"
-          [Account]="item.account.name"
+          [Account]="item.account"
           [Category]="item.category.name"
           (onDelete)="deleteTransaction(item)"
           (onEdit)="openEditWindow(item)"

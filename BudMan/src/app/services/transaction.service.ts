@@ -61,11 +61,11 @@ export class TransactionService implements OnInit{
     return this.http.get<Transaction[]>(this.apiUrl)
   }
   addTransaction(trans:Transaction):Observable<Transaction>{
-    return this.http.put<Transaction>(this.apiUrl_acc+`${this.userid}/account/${trans.account.id}/add`,
+    return this.http.put<Transaction>(this.apiUrl_acc+`${this.userid}/account/${trans.account}/add`,
     {
       "amount": trans.amount,
       "name": trans.name,
-      "account": trans.account.id,
+      "account": trans.account,
       "date": trans.date,
       "categoryId": trans.categoryId
     }
@@ -78,12 +78,12 @@ export class TransactionService implements OnInit{
   }
   updateTransaction(trans:Transaction){
     console.log(`${trans.id}`)
-    const url = `${this.apiUrl_acc}${this.userid}/${trans.account.id}/update`
+    const url = `${this.apiUrl_acc}${this.userid}/${trans.account}/update`
     return this.http.put<Transaction>(url,    {
       "id":trans.id,
       "amount": trans.amount,
       "name": trans.name,
-      "account": trans.account.id,
+      "account": trans.account,
       "date": trans.date,
       "categoryId": trans.categoryId
     }
@@ -118,14 +118,21 @@ export class TransactionService implements OnInit{
   }
   getFullUser(): Observable<UserModel>{
     let firstReq = this.auth.getUser();
+    // let nxtrq = firstReq.pipe(
+    //   switchMap((res1) => res1 != undefined
+    //     ? this.http.get<UserModel>(this.apiUrl_acc + `${res1.id}`).pipe(
+    //       map((res2) => res2 ),
+    //       catchError(() => of())
+    //     )
+    //     : of()
+    //   )
+    // )
     let nxtrq = firstReq.pipe(
-      switchMap((res1) => res1 != undefined
-        ? this.http.get<UserModel>(this.apiUrl_acc + `${res1.id}`).pipe(
-          map((res2) => res2 ),
-          catchError(() => of())
-        )
-        : of()
-      )
+      switchMap(res => {
+        if(res == undefined)throw new Error("request not completed")
+        return this.http.get<UserModel>(this.apiUrl_acc + `${res.id}`)
+      }),
+      catchError(()=>of())
     )
     return nxtrq;
   }

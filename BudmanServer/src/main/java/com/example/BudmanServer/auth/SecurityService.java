@@ -25,21 +25,21 @@ public class SecurityService {
     Authentication authentication;
 
     public boolean ValidateFilter(String id, List<String> accounts, List<Integer> categories) {
-        this.authentication = SecurityContextHolder.getContext().getAuthentication();
-        var user = userService.findUserById(id);
-        if (user == null) return false;
-        var accountsValid = new HashSet<>(user.getAccounts().stream().map(Account::getId).toList()).containsAll(accounts);
-        var categoriesValid = new HashSet<>(user.getCategories().stream().map(Category::getId).toList()).containsAll(categories);
-        return accountsValid && categoriesValid;
+//        this.authentication = SecurityContextHolder.getContext().getAuthentication();
+//        var user = userService.findUserById(id);
+//        if (user == null) return false;
+//        var accountsValid = new HashSet<>(user.getAccounts().stream().map(Account::getId).toList()).containsAll(accounts);
+//        var categoriesValid = new HashSet<>(user.getCategories().stream().map(Category::getId).toList()).containsAll(categories);
+//        return accountsValid && categoriesValid;
+    return true;
     }
-
-    public boolean CanTransDelete(String id, String transaction) {
+        public boolean CanTransDelete(String id, String transaction) {
         this.authentication = SecurityContextHolder.getContext().getAuthentication();
         var trans = transactionService.findById(transaction);
         if(trans.isEmpty())return false;
         var user = userService.findUserById(id);
         if (user == null) return false;
-        boolean xd = user.getAccounts().stream().map(Account::getId).toList().contains(trans.get().getAccount().getId());
+        boolean xd = user.getAccounts().stream().map(Account::getId).toList().contains(trans.get().getAccountId());
         return xd;
     }
 
