@@ -32,6 +32,7 @@ public class UserAccount implements UserDetails{
     @NotBlank
     @Size(max = 120)
     private String password;
+    @DBRef
     private List<Account> accounts;
 
     @DBRef // roles do not appear twice pog

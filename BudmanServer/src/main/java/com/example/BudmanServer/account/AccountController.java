@@ -1,5 +1,6 @@
 package com.example.BudmanServer.account;
 
+import com.example.BudmanServer.auth.UserDetailsImpl;
 import com.example.BudmanServer.transaction.Transaction;
 import com.example.BudmanServer.user.UserAccount;
 import com.example.BudmanServer.user.UserService;
@@ -16,42 +17,43 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/v1/accounts")
 @AllArgsConstructor
+@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
 public class AccountController {
     AccountService accountService;
     UserService userService;
     @GetMapping("/")
-    @PreAuthorize("authentication.principal.getId().equals(#id)")
     List<Account> getUserAccounts() {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(xd!=null && !xd.getId().isEmpty())
-            return userService.getUserAccounts(xd.getId());
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser!=null && !currentUser.getId().isEmpty())
+            return userService.getUserAccounts(currentUser.getId());
         else
             return null;
     }
 
     @PostMapping("/add")
-    Optional<UserAccount> addUserAccount( @RequestBody String accountName) {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(xd!=null && !xd.getId().isEmpty())
-            return accountService.addUserAccount(xd.getId(),accountName);
+    Optional<Account> addUserAccount( @RequestParam String accountName) {
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser!=null && !currentUser.getId().isEmpty())
+            return accountService.addUserAccount(currentUser.getId(),accountName);
         else
             return Optional.empty();
     }
 
     @DeleteMapping("/delete/{accountId}")
-    Optional<UserAccount> deleteUserAccount(@PathVariable String accountId) {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(xd!=null && !xd.getId().isEmpty())
-            return accountService.deleteUserAccount(xd.getId(), accountId);
+    Optional<Account> deleteUserAccount(@PathVariable String accountId) {
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser!=null && !currentUser.getId().isEmpty())
+            return accountService.deleteUserAccount(currentUser.getId(),accountId);
         else
             return Optional.empty();
+
     }
 
     @PutMapping("/update/{accountId}")
-    Optional<UserAccount> updateUserAccount(@PathVariable String accountId, @RequestBody String accountName) {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(xd!=null && !xd.getId().isEmpty())
-            return accountService.updateUserAccount(xd.getId(), accountId, accountName);
+    Optional<Account> updateUserAccount(@PathVariable String accountId, @RequestParam String accountName,@RequestParam Boolean active) {
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser!=null && !currentUser.getId().isEmpty())
+            return accountService.updateUserAccount(currentUser.getId(), accountId, accountName,active);
         else
             return Optional.empty();
     }

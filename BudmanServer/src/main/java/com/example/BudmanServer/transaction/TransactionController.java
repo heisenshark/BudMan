@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import java.util.Map;
 @Validated
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 @AllArgsConstructor
+@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
 public class TransactionController {
     private TransactionService transactionService;
     private UserService userService;
@@ -48,10 +50,10 @@ public class TransactionController {
     ResponseEntity<List<Transaction>> getTransactions(
             @RequestBody TransactionRequestBody payload) {
         UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var xd = userService.findUserById(u.getId());
+        var currentUser = userService.findUserById(u.getId());
 
-        if (new HashSet<>(xd.getAccounts().stream().map(Account::getId).toList()).containsAll(payload.getAccounts())
-                && new HashSet<>(xd.getCategories().stream().map(Category::getId).toList()).containsAll(payload.categories)
+        if (new HashSet<>(currentUser.getAccounts().stream().map(Account::getId).toList()).containsAll(payload.getAccounts())
+         && new HashSet<>(currentUser.getCategories().stream().map(Category::getId).toList()).containsAll(payload.categories)
         )
             return new ResponseEntity<>
                     (transactionService.getTransactions(payload.getAccounts().stream().toList(), payload.getCategories().stream().toList()), HttpStatus.OK);
@@ -64,11 +66,11 @@ public class TransactionController {
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     ResponseEntity<List<Transaction>> getTransactionsWithDate(@RequestBody TransactionRequestBody payload) {
         UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var xd = userService.findUserById(u.getId());
+        var currentUser = userService.findUserById(u.getId());
 
-        if ((new HashSet<>(xd.getAccounts().stream().map(Account::getId).toList()).containsAll(payload.getAccounts())
-                && new HashSet<>(xd.getCategories().stream().map(Category::getId).toList()).containsAll(payload.categories)
-                || xd.getRoles().stream().map(Role::getName).toList().contains(ERole.ROLE_ADMIN))
+        if ((new HashSet<>(currentUser.getAccounts().stream().map(Account::getId).toList()).containsAll(payload.getAccounts())
+                && new HashSet<>(currentUser.getCategories().stream().map(Category::getId).toList()).containsAll(payload.categories)
+                || currentUser.getRoles().stream().map(Role::getName).toList().contains(ERole.ROLE_ADMIN))
         )
             if (payload.getDateEnd() == null || payload.getDateStart() == null)
                 return new ResponseEntity<>
@@ -100,11 +102,11 @@ public class TransactionController {
              @RequestParam(value = "size", defaultValue = "10") @Max(200) @Min(0) int size) {
         Pageable paging = PageRequest.of(page, size);
         UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var xd = userService.findUserById(u.getId());
+        var currentUser = userService.findUserById(u.getId());
 
-        if ((new HashSet<>(xd.getAccounts().stream().map(Account::getId).toList()).containsAll(payload.getAccounts())
-                && new HashSet<>(xd.getCategories().stream().map(Category::getId).toList()).containsAll(payload.categories)
-                || xd.getRoles().stream().map(Role::getName).toList().contains(ERole.ROLE_ADMIN))
+        if ((new HashSet<>(currentUser.getAccounts().stream().map(Account::getId).toList()).containsAll(payload.getAccounts())
+                && new HashSet<>(currentUser.getCategories().stream().map(Category::getId).toList()).containsAll(payload.categories)
+                || currentUser.getRoles().stream().map(Role::getName).toList().contains(ERole.ROLE_ADMIN))
         ) {
             var pagetrans = transactionService
                     .getTransactionsPaged(
@@ -124,12 +126,23 @@ public class TransactionController {
         } else
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String,String> handleInvalidArgument(ConstraintViolationException ex){
+        Map<String,String> response = new HashMap<String, String>() ;
+        ex.getConstraintViolations().forEach(
+                n->{
+                    response.put( n.getPropertyPath().toString(),n.getMessage());
+                }
+        );
+        return response;
+    }
 
     @PutMapping("/add")
     ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction) {
         UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var xd = userService.findUserById(u.getId());
-        if (xd.getAccounts().stream().map(Account::getId).toList().contains(transaction.getAccountId())) {
+        var currentUser = userService.findUserById(u.getId());
+        if (currentUser.getAccounts().stream().map(Account::getId).toList().contains(transaction.getAccountId())) {
             return new ResponseEntity<>((Transaction) transactionService.addTransactionRefactored(transaction).orElse(null), HttpStatus.OK);
         } else
             return new ResponseEntity<>((Transaction) null, HttpStatus.UNAUTHORIZED);
@@ -140,8 +153,8 @@ public class TransactionController {
             , consumes = "application/json"
             , produces = "application/json")
     ResponseEntity<Transaction> updateTransaction(@RequestBody Transaction transaction) {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (xd.getAccounts().stream().map(Account::getId).toList().contains(transaction.getAccountId())) {
+        UserAccount currentUser = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (currentUser.getAccounts().stream().map(Account::getId).toList().contains(transaction.getAccountId())) {
             var xdd = transactionService.updateTransactionRefactored(transaction);
             if (xdd.isEmpty())
                 return new ResponseEntity<>((Transaction) null, HttpStatus.UNAUTHORIZED);
@@ -155,11 +168,11 @@ public class TransactionController {
         //@PreAuthorize("@securityService.CanTransDelete(authentication.principal.getId(),#transactionId)")
     ResponseEntity<String> deleteTransaction(@PathVariable String transactionId) {
         UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var xd = userService.findUserById(u.getId());
-        var tr = transactionService.getTransaction(transactionId);
-        if (tr.isPresent()
-                && xd.getAccounts().stream().map(Account::getId).toList().contains(tr.get().getAccountId())) {
-            var xdd = transactionService.deleteTransaction(xd.getId(), transactionId);
+        var currentUser = userService.findUserById(u.getId());
+        var transaction = transactionService.getTransaction(transactionId);
+        if (transaction.isPresent()
+                && currentUser.getAccounts().stream().map(Account::getId).toList().contains(transaction.get().getAccountId())) {
+            var xdd = transactionService.deleteTransaction(currentUser.getId(), transactionId);
             if (xdd == null)
                 return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
             else

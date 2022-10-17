@@ -2,6 +2,7 @@ package com.example.BudmanServer.user;
 
 import com.example.BudmanServer.account.Account;
 import com.example.BudmanServer.account.AccountService;
+import com.example.BudmanServer.auth.UserDetailsImpl;
 import com.example.BudmanServer.transaction.Transaction;
 import com.example.BudmanServer.transaction.TransactionService;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequestMapping("api/v1/users")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 @AllArgsConstructor
+@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -31,48 +33,34 @@ public class UserController {
         System.out.println("AAAAAAA");
         return userService.getAllUsers();
     }
-
-    //    @PutMapping("/modify/{id}")
-//    public UserAccount modifyUser(@PathVariable String id,
-//                                  String login,
-//                                  String password){
-//        return userService.updateUser(id,login,password) ;
-//    }
-//    @PostMapping("/add")
-//    public String addUser(String login,
-//                        String password){
-//        return userService.addUser(login,password);
-//    }
     @GetMapping("/{id}")
     UserAccount getUser(@PathVariable String id) {
         return userService.findUserById(id);
     }
 
-    @PutMapping("/categories/add/")
+    @PostMapping("/categories/add")
     Optional<UserAccount> deleteUserCategory(@RequestParam String category) {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(xd==null)
+        //TODO: tutaj trzeba coś zmienić bo nie działa, z UserAccount na UserDetailsImple
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser==null)
             return Optional.empty();
-        return userService.addUserCategory(xd.getId(), category);
+        return userService.addUserCategory(currentUser.getId(), category);
     }
 
-    @PutMapping("/categories/delete/{category}")
+    @DeleteMapping("/categories/delete/{category}")
     Optional<UserAccount> deleteUserCategory(@PathVariable Integer category) {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(xd==null)
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser==null)
             return Optional.empty();
-        return userService.deleteUserCategory(xd.getId(), category);
+        return userService.deleteUserCategory(currentUser.getId(), category);
     }
 
     @PutMapping("/categories/update")
-    Optional<UserAccount> updateUserCategory( Integer category, String categoryName) {
-        UserAccount xd = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(xd==null)
+    Optional<UserAccount> updateUserCategory(@RequestParam Integer category,@RequestParam String name) {
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(currentUser==null)
             return Optional.empty();
-        return userService.updateUserCategory(xd.getId(), category, categoryName);
+        return userService.updateUserCategory(currentUser.getId(), category, name);
     }
-
-
-
 
 }
