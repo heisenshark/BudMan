@@ -85,10 +85,10 @@ export class TransactionAddDialogComponent implements OnInit {
 
     //this.category = trans.category
 
-    const toSelect = this.categories.find(c => c.id == trans.category.id);
+    const toSelect = this.categories.find(c => c.id == trans.categoryId);
     this.transactionGroup.controls['category'].setValue(toSelect);
 
-    const acc = this.accounts.find(c => c.id == trans.account.id);
+    const acc = this.accounts.find(c => c.id == trans.accountId);
     this.transactionGroup.controls['account'].setValue(acc);
 
     //console.log(this.category)
@@ -119,9 +119,10 @@ export class TransactionAddDialogComponent implements OnInit {
       amount: +this.transactionGroup.get('amount')?.value,
       name: this.transactionGroup.get('name')?.value,
       category: this.transactionGroup.get('category')?.value,
-      account: this.transactionGroup.get('account')?.value,
+      accountId: (this.transactionGroup.get('account')?.value as AccountModel).id ,
       date: this.transactionGroup.get('date')?.value,
-      categoryId: (this.transactionGroup.get('category')?.value as CategoryModel).id
+      categoryId: (this.transactionGroup.get('category')?.value as CategoryModel).id,
+      accountMod: this.transactionGroup.get('accountMod')?.value as AccountModel
     }
 
     if (!this.isEdit) {
@@ -135,6 +136,7 @@ export class TransactionAddDialogComponent implements OnInit {
       this.transactions.updateTransaction(t).subscribe()
       this.transactions.onEditTrans.next(t)
       this.info = 'Transaction Editted'
+
       this.uiService.clearEdittedTrans()
       this.hideAddTrans()
     }
@@ -142,7 +144,6 @@ export class TransactionAddDialogComponent implements OnInit {
     this.name = this.amount = ''
     this.date.setValue(new Date())
   }
-
   hideAddTrans() {
     this.uiService.displayAddTransaction(false)
   }

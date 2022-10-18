@@ -12,7 +12,7 @@ export class TransactionComponent implements OnInit {
 
   @Input() Name: string = 'Name'
   @Input() Category: string = 'Category'
-  @Input() Account: string = 'Account'
+  @Input() Account: string|undefined = 'Account'
   @Input() Datee: Date | null = null
   @Input() Amount: number | string = 'Amount'
   @Input() IsHeader: boolean = false

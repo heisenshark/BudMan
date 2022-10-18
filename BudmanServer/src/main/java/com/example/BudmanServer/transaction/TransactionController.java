@@ -93,7 +93,7 @@ public class TransactionController {
             return new ResponseEntity<>(List.of(), HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/filter/pagination")
+    @PostMapping("/filter/pagination")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @Validated
     ResponseEntity<Map<String, Object>> getTransactionsWithDate
@@ -138,7 +138,7 @@ public class TransactionController {
         return response;
     }
 
-    @PutMapping("/add")
+    @PostMapping("/add")
     ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction) {
         UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var currentUser = userService.findUserById(u.getId());

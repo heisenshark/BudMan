@@ -48,6 +48,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
   transactionsUI: Transaction[] = []
   pageSize: number = 25
   pageIndex: number = 0
+  pageCount: number = 0
+  totalItems:number =0
   pageSizeOptions = [5, 10, 25, 50, 100]
   pageEvent!: PageEvent
 
@@ -64,22 +66,29 @@ export class BudmanTransactionsPageComponent implements OnInit {
           console.log('dupa')
           this.showAddTrans = val})
   }
+  //TODO: przechowywanie wszystkich transakcji w jakimś serwisie
+  //TODO: rozbić to gówno na jakieś mniejsze komponenty
 
   ngOnInit(): void {
     this.trasactionService.getFullUser().subscribe(
       x=>{
         this.accounts = x.accounts.map((acc) => [acc, true])
         this.categories = x.categories.map(x=>[x,true])
-
-        this.trasactionService.getTransactions().subscribe(
-          (transactions) => {
-            this.transactions = transactions
-           this.transactions.forEach(x =>{
+        let cat = this.categories.map(n=>n[0].id)
+        let acc = this.accounts.map(n=>n[0].id)
+        this.trasactionService.getTransactions(this.pageIndex,this.pageSize,acc,cat).subscribe(
+          (transPage) => {
+            this.transactions = transPage.transactions
+            this.pageIndex = transPage.currentPage
+            this.pageCount =transPage.totalPages
+            this.totalItems = transPage.totalItems
+            this.transactions.forEach(x =>{
               x.category = this.getCategoryById(x.categoryId)
+              x.accountMod = this.getAccountById(x.accountId)
             })
-            this.transactionsUI = transactions.slice(0, this.pageSize)
-            console.log(transactions)
-          }
+            this.transactionsUI = transPage.transactions
+            console.log(transPage)
+              }
         )
 
       }
@@ -123,10 +132,28 @@ export class BudmanTransactionsPageComponent implements OnInit {
       this.pageIndex = this.pageEvent.pageIndex
       this.pageSize = this.pageEvent.pageSize
     }
-    let en = (this.pageIndex + 1) * this.pageSize
-    let st = (this.pageIndex) * this.pageSize
-    this.transactionsUI = this.transactions.slice(st, en > this.transactions.length ? undefined : en)
-  }
+
+    // let en = (this.pageIndex + 1) * this.pageSize
+    // let st = (this.pageIndex) * this.pageSize
+    // this.transactionsUI = this.transactions.slice(st, en > this.transactions.length ? undefined : en)
+    let cat = this.categories.filter(n=>n[1]).map(n=>n[0].id)
+    let acc = this.accounts.filter(n=>n[1]).map(n=>n[0].id)
+    this.trasactionService.getTransactions(this.pageIndex,this.pageSize,acc,cat).subscribe(
+  (transPage) => {
+        this.transactions = transPage.transactions
+        this.pageIndex = transPage.currentPage
+        this.pageCount =transPage.totalPages
+        this.totalItems = transPage.totalItems
+        this.transactions.forEach(x =>{
+          x.category = this.getCategoryById(x.categoryId)
+          x.accountMod = this.getAccountById(x.accountId)
+        })
+        this.transactionsUI = transPage.transactions
+        console.log(transPage)
+      }
+    )
+
+}
 
   deleteTransaction(t: Transaction) {
     if (t.id == undefined) return
@@ -151,15 +178,6 @@ export class BudmanTransactionsPageComponent implements OnInit {
       this.dialogdata = result
     })
 
-  }
-  addTransaction(t: Transaction) {
-    this.trasactionService.addTransaction(t).subscribe(
-      tr => {
-        console.log(tr)
-        this.transactions.push(tr)
-        this.getTransactionsToUI()
-      }
-    )
   }
   editTransaction(t: Transaction) {
     this.trasactionService.updateTransaction(t).subscribe((tr) => {
@@ -192,29 +210,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
     }
   }
   filterTransactions() {
-    this.trasactionService.getTransactions().subscribe(
-      (transs) => {
-        this.transactions = []
-        this.transactions = transs.filter(
-          (trans) => {
-            let acc = this.accounts.find((n) => { return n[0].id == trans.account && n[0].active == true })
-            let cat = this.categories.find((n) => { return n[0] == trans.category && n[1] == true })
-            let td = new Date(trans.date).getTime()
-            console.log(`${acc} ${cat} ${new Date(td).getTime()}`)
-            return acc != undefined && cat != undefined
-              && (this.dateDisabled ||
-                (td < this.dateRange.value.end.getTime()
-                  && td > this.dateRange.value.start.getTime()))
-
-          }
-        )
-
-        this.getTransactionsToUI()
-        this.filterError = null
-        console.log(transs)
-        console.log(this.transactionsUI)
-      }
-    )
+    this.pageIndex = 0
+    this.getTransactionsToUI()
   }
 
   calculateBalance(): number {
@@ -231,6 +228,13 @@ export class BudmanTransactionsPageComponent implements OnInit {
     let xd = this.categories.find(x => x[0].id==id)
     if(xd == undefined)
       throw new Error("dup");
+    return xd[0]
+  }
+
+  getAccountById(id:string):AccountModel{
+    let xd = this.accounts.find(x=>x[0].id==id)
+    if(xd==undefined)
+      throw new Error("dupa")
     return xd[0]
   }
 }

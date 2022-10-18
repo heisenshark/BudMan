@@ -1,10 +1,11 @@
 import { Observable, of, concat,switchMap,map ,catchError,tap,takeLast, Subject} from 'rxjs';
-import { HttpClient,HttpHeaders} from '@angular/common/http';
+import { HttpClient,HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Transaction } from '../Transaction';
 // import { getRandomTrans } from '../mock-data'
 import { AuthServiceService } from './auth-service.service';
 import { AccountModel, UserModel, CategoryModel } from '../_helpers/HelperModels';
+import { TransacionsPage } from '../_helpers/TransactionsPage';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -57,15 +58,22 @@ export class TransactionService implements OnInit{
       )
   }
 
-  getTransactions():Observable<Transaction[]>{
-    return this.http.get<Transaction[]>(this.apiUrl)
+  getTransactions(page:number,size:number,accounts:string[],categories:number[]):Observable<TransacionsPage>{
+    let params:HttpParams = new HttpParams().set('page',page).set('size',size)
+    return this.http.post<TransacionsPage>(`${this.apiUrl}filter/pagination`,
+    {
+      "accounts":accounts,
+      "categories":categories
+    }
+    ,{params:params})
   }
+
   addTransaction(trans:Transaction):Observable<Transaction>{
-    return this.http.put<Transaction>(this.apiUrl_acc+`${this.userid}/account/${trans.account}/add`,
+    return this.http.post<Transaction>(this.apiUrl+`add`,
     {
       "amount": trans.amount,
       "name": trans.name,
-      "account": trans.account,
+      "accountId": trans.accountId,
       "date": trans.date,
       "categoryId": trans.categoryId
     }
@@ -73,17 +81,17 @@ export class TransactionService implements OnInit{
   }
 
   deleteTransaction(trans:Transaction){
-    const url = `${this.apiUrl_acc}transactions/delete/${trans.id}`
+    const url = `${this.apiUrl}delete/${trans.id}`
     return this.http.delete(url,{responseType:'text'})
   }
   updateTransaction(trans:Transaction){
     console.log(`${trans.id}`)
-    const url = `${this.apiUrl_acc}${this.userid}/${trans.account}/update`
+    const url = `${this.apiUrl_acc}${this.userid}/${trans.accountId}/update`
     return this.http.put<Transaction>(url,    {
       "id":trans.id,
       "amount": trans.amount,
       "name": trans.name,
-      "account": trans.account,
+      "accountId": trans.accountId,
       "date": trans.date,
       "categoryId": trans.categoryId
     }
