@@ -22,16 +22,17 @@ import java.util.Set;
 
 @Data
 @Document
-public class UserAccount {
+public class UserAccount implements UserDetails{
     @Id
     private String id;
     @Indexed( unique = true)
     @NotBlank
     @Size(max = 20)
-    private String login;
+    private String username;
     @NotBlank
     @Size(max = 120)
     private String password;
+    @DBRef
     private List<Account> accounts;
 
     @DBRef // roles do not appear twice pog
@@ -44,17 +45,17 @@ public class UserAccount {
     private LocalDateTime dateCreated;
 
     public UserAccount(List<Category> categories,
-                       String login,
+                       String username,
                        String password,
                        LocalDateTime dateCreated) {
         this.categories = categories;
-        this.login = login;
+        this.username = username;
         this.password = password;
         this.dateCreated = dateCreated;
     }
 
-    public UserAccount(String login, String password, LocalDateTime dateCreated) {
-        this.login = login;
+    public UserAccount(String username, String password, LocalDateTime dateCreated) {
+        this.username = username;
         this.password = password;
         this.dateCreated = dateCreated;
         this.categories = List.of(new Category());
@@ -65,7 +66,30 @@ public class UserAccount {
     }
 
 
-
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(ERole.ROLE_USER.name()));
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}
 
 

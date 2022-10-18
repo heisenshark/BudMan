@@ -6,20 +6,34 @@
       "type": "npm",
       "script": "start",
       "isBackground": true,
-      "problemMatcher": {
+      "problemMatcher":{
         "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
+          "base": "$tsc",
+          "pattern": {
+            "regexp": "^(Error: )?([^\\s].*)[\\(:](\\d+)[,:](\\d+)(?:\\):\\s+|\\s+-\\s+)(error|warning|info)\\s+TS(\\d+)\\s*:\\s*(.*)$",
+            "file": 2,
+            "line": 3,
+            "column": 4,
+            "severity": 5,
+            "code": 6,
+            "message": 7
           },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
+
+
+          "background" : {
+            "activeOnStart": true,
+            "beginsPattern": {
+              "regexp": "(.*?)"
+            },
+            "endsPattern": {
+              "regexp": "bundle generation complete"
+            }
           }
+
         }
-      }
-    },
+
+
+          },
     {
       "type": "npm",
       "script": "test",

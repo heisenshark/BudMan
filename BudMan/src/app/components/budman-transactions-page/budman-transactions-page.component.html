@@ -75,7 +75,7 @@
         <button mat-raised-button color="secondary" (click)="manipulateFilter('selectAccounts')">Select All</button>
         <button mat-raised-button color="secondary" (click)="manipulateFilter('deselectAccounts')">Deselect All</button>
       </section>
-      <button mat-raised-button class="filter-button" color="primary" (click)="filterTransactions()">Filter</button>
+      <button  mat-raised-button class="filter-button" color="primary" (click)=" filterTransactions()">Filter</button>
       <span class ="filter-error" *ngIf="filterError!=null">{{filterError}}</span>
     </div>
   </div>
@@ -87,7 +87,7 @@
       <div class="heading-table-legend">
         <h1>Balance ${{ calculateBalance() }}</h1>
         <mat-paginator
-        [length]="transactions.length"
+        [length]="totalItems"
         [pageSize]="pageSize"
         [pageSizeOptions]="pageSizeOptions"
         [pageIndex]="pageIndex"
@@ -98,11 +98,10 @@
 
       </div>
       <div class="transactions-view">
-        <button (click)="aaa()" >XDDDD</button>
         <app-transaction
-          *ngFor="let item of transactionsUI"
+          *ngFor="let item of transactions"
           [transaction]="item"
-          [Account]="item.account.name"
+          [Account]="item.accountMod.name"
           [Category]="item.category.name"
           (onDelete)="deleteTransaction(item)"
           (onEdit)="openEditWindow(item)"

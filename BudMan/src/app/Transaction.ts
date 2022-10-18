@@ -4,7 +4,8 @@ export interface Transaction{
   amount:number
   name: string
   category:CategoryModel
-  account:AccountModel
+  accountMod:AccountModel
+  accountId:string
   date: Date
   categoryId:number
 }

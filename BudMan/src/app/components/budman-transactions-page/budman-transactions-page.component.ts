@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { UiService } from '../../services/ui.service'
-import { Subscription, Observable } from 'rxjs'
+import { Subscription, Observable, switchMap} from 'rxjs'
 import { TransactionService } from 'src/app/services/transaction.service'
 import { Transaction } from '../../Transaction'
-import { TaskServiceService } from '../../services/task-service.service'
 // import { getRandomTrans } from '../../mock-data'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { PageEvent } from '@angular/material/paginator'
@@ -49,6 +48,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
   transactionsUI: Transaction[] = []
   pageSize: number = 25
   pageIndex: number = 0
+  pageCount: number = 0
+  totalItems:number =0
   pageSizeOptions = [5, 10, 25, 50, 100]
   pageEvent!: PageEvent
 
@@ -61,12 +62,37 @@ export class BudmanTransactionsPageComponent implements OnInit {
     this.addTransSub =
       uiService
         .onToggleAddTransaction()
-        .subscribe(val => this.showAddTrans = val)
+        .subscribe(val => {
+          console.log('dupa')
+          this.showAddTrans = val})
   }
+  //TODO: przechowywanie wszystkich transakcji w jakimś serwisie
+  //TODO: rozbić to gówno na jakieś mniejsze komponenty
 
   ngOnInit(): void {
-    this.categories = []
-    this.accounts = []
+    this.trasactionService.getFullUser().subscribe(
+      x=>{
+        this.accounts = x.accounts.map((acc) => [acc, true])
+        this.categories = x.categories.map(x=>[x,true])
+        let cat = this.categories.map(n=>n[0].id)
+        let acc = this.accounts.map(n=>n[0].id)
+        this.trasactionService.getTransactions(this.pageIndex,this.pageSize,acc,cat).subscribe(
+          (transPage) => {
+            this.transactions = transPage.transactions
+            this.pageIndex = transPage.currentPage
+            this.pageCount =transPage.totalPages
+            this.totalItems = transPage.totalItems
+            this.transactions.forEach(x =>{
+              x.category = this.getCategoryById(x.categoryId)
+              x.accountMod = this.getAccountById(x.accountId)
+            })
+            this.transactionsUI = transPage.transactions
+            console.log(transPage)
+              }
+        )
+
+      }
+    )
 
     this.trasactionService.onAddTrans.subscribe(
       n=>{
@@ -86,44 +112,9 @@ export class BudmanTransactionsPageComponent implements OnInit {
         this.getTransactionsToUI()
       }
     )
-    this.trasactionService.getUserFull().subscribe(
-      x=>{
-        x.accounts.map((acc) => {
-          this.accounts.push([acc, true])
-        })
-        x.categories.map(x=>{
-          this.categories.push([x,true]);
-        })
-
-        this.trasactionService.getTransactions().subscribe(
-          (transactions) => {
-            this.transactions = transactions
-           this.transactions.forEach(x =>{
-              x.category = this.getCategoryById(x.categoryId)
-            })
-            this.transactionsUI = transactions.slice(0, this.pageSize)
-            console.log(transactions)
-          }
-        )
-
-      }
-    )
-
-
-    // this.trasactionService.getAccounts().subscribe(
-
-    //   (accs) =>
-    //     accs.map((acc) => {
-    //       this.accounts.push([acc.name, true])
-    //     })
-
-    // )
-
   }
 
   onAddTransactionClick() {
-
-
     const dialogRef = this.dialog.open(TransactionAddDialogComponent, {
       width: '400px',
     })
@@ -131,12 +122,8 @@ export class BudmanTransactionsPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.uiService.clearEdittedTrans()
       console.log(this.uiService.getEdittedTrans())
-      //console.log('The dialog was closed')
       this.dialogdata = result
     })
-
-    // this.uiService.displayAddTransaction(true)
-
 
   }
 
@@ -145,10 +132,28 @@ export class BudmanTransactionsPageComponent implements OnInit {
       this.pageIndex = this.pageEvent.pageIndex
       this.pageSize = this.pageEvent.pageSize
     }
-    let en = (this.pageIndex + 1) * this.pageSize
-    let st = (this.pageIndex) * this.pageSize
-    this.transactionsUI = this.transactions.slice(st, en > this.transactions.length ? undefined : en)
-  }
+
+    // let en = (this.pageIndex + 1) * this.pageSize
+    // let st = (this.pageIndex) * this.pageSize
+    // this.transactionsUI = this.transactions.slice(st, en > this.transactions.length ? undefined : en)
+    let cat = this.categories.filter(n=>n[1]).map(n=>n[0].id)
+    let acc = this.accounts.filter(n=>n[1]).map(n=>n[0].id)
+    this.trasactionService.getTransactions(this.pageIndex,this.pageSize,acc,cat).subscribe(
+  (transPage) => {
+        this.transactions = transPage.transactions
+        this.pageIndex = transPage.currentPage
+        this.pageCount =transPage.totalPages
+        this.totalItems = transPage.totalItems
+        this.transactions.forEach(x =>{
+          x.category = this.getCategoryById(x.categoryId)
+          x.accountMod = this.getAccountById(x.accountId)
+        })
+        this.transactionsUI = transPage.transactions
+        console.log(transPage)
+      }
+    )
+
+}
 
   deleteTransaction(t: Transaction) {
     if (t.id == undefined) return
@@ -161,8 +166,6 @@ export class BudmanTransactionsPageComponent implements OnInit {
     )
   }
   openEditWindow(t: Transaction) {
-    // this.uiService.setEdittedTransaction(t)
-    // this.uiService.displayAddTransaction(true)
     this.uiService.setEdittedTransaction(t)
     const dialogRef = this.dialog.open(TransactionAddDialogComponent, {
       width: '400px',
@@ -175,24 +178,6 @@ export class BudmanTransactionsPageComponent implements OnInit {
       this.dialogdata = result
     })
 
-  }
-  aaa() {
-
-    console.log(this.transactionsUI)
-    //   this.trasactionService.addTransaction(getRandomTrans(1)[0]).subscribe((trans) => {
-    //     this.transactions.push(trans)
-    //     this.getTransactionsToUI()
-    //   })
-    //   //this.trasactionService.randomShit()
-  }
-  addTransaction(t: Transaction) {
-    this.trasactionService.addTransaction(t).subscribe(
-      tr => {
-        console.log(tr)
-        this.transactions.push(tr)
-        this.getTransactionsToUI()
-      }
-    )
   }
   editTransaction(t: Transaction) {
     this.trasactionService.updateTransaction(t).subscribe((tr) => {
@@ -225,60 +210,31 @@ export class BudmanTransactionsPageComponent implements OnInit {
     }
   }
   filterTransactions() {
-    // if (Math.random() > 0.7) this.filterError = "erorrTest"
-    // if(this.accounts.find((n) => { return n[1] == true }) == undefined)
-    //   {
-    //     this.filterError = "Select at least one account"
-    //     return
-    //   }
-    // if(this.categories.find((n) => { return n[1] == true }) == undefined)
-    //   {
-    //     this.filterError = "Select at least one category"
-    //     return
-    //   }
-    // if(!this.dateDisabled&&(this.dateRange.value.end == null || this.dateRange.value.start ==null) )
-    //   {
-    //     this.filterError = "Select a valid data range"
-    //     return
-    //   }
-    this.trasactionService.getTransactions().subscribe(
-      (transs) => {
-        this.transactions = []
-        this.transactions = transs.filter(
-          (trans) => {
-            let acc = this.accounts.find((n) => { return n[0].name == trans.account.name && n[0].active == true })
-            let cat = this.categories.find((n) => { return n[0] == trans.category && n[1] == true })
-            let td = new Date(trans.date).getTime()
-            console.log(`${acc} ${cat} ${new Date(td).getTime()}`)
-            return acc != undefined && cat != undefined
-              && (this.dateDisabled ||
-                (td < this.dateRange.value.end.getTime()
-                  && td > this.dateRange.value.start.getTime()))
-
-          }
-        )
-
-        this.getTransactionsToUI()
-        this.filterError = null
-        console.log(transs)
-        console.log(this.transactionsUI)
-      }
-    )
+    this.pageIndex = 0
+    this.getTransactionsToUI()
   }
 
   calculateBalance(): number {
-    return this.transactions.reduce(
-      (acc, val) => {
-        return acc + val.amount
-      }
-      , 0
-    )
+    // return this.transactions.reduce(
+    //   (acc, val) => {
+    //     return acc + val.amount
+    //   }
+    //   , 0
+    // )
+    return 0
   }
 
   getCategoryById(id:number):CategoryModel{
     let xd = this.categories.find(x => x[0].id==id)
     if(xd == undefined)
       throw new Error("dup");
+    return xd[0]
+  }
+
+  getAccountById(id:string):AccountModel{
+    let xd = this.accounts.find(x=>x[0].id==id)
+    if(xd==undefined)
+      throw new Error("dupa")
     return xd[0]
   }
 }

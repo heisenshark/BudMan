@@ -5,19 +5,20 @@ import { Transaction } from '../Transaction';
 @Injectable({
   providedIn: 'root'
 })
-export class UiService {
 
+
+export class UiService {
+  darkClassName = 'darkMode';
   public static darkTheme:boolean = localStorage.getItem("mode") == "true"
   private showAddTask:boolean = false
-  private subject:any = new Subject()
   private showAddTransaction = false
   private addTransactionSubject:any = new Subject()
   private showMobileNav: boolean = false
   private showMobileNavSubject:any = new Subject()
-  darkClassName = 'darkMode';
 
   private edittedTrans:Transaction|null= null
   constructor(private overlay: OverlayContainer) { }
+  
   ngOnInit(): void {
     if (UiService.darkTheme) {
       this.overlay.getContainerElement().classList.add(this.darkClassName);
@@ -25,15 +26,6 @@ export class UiService {
       this.overlay.getContainerElement().classList.remove(this.darkClassName);
     }
 
-  }
-
-  toggleAddTask():void {
-    this.showAddTask = !this.showAddTask
-    this.subject.next(this.showAddTask)
-  }
-
-  onToggle():Observable<any>{
-    return this.subject.asObservable()
   }
 
   displayAddTransaction(show:boolean):void {

@@ -70,7 +70,7 @@ public class JwtUtils {
     }
     public String generateTokenFromUser(UserAccount user) {
         return Jwts.builder()
-                .setSubject(user.getLogin())
+                .setSubject(user.getUsername())
                 .claim("userID",user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))

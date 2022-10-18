@@ -26,7 +26,6 @@ export class NumbersOnlyDirective {
       value = value.substring(0,value.length-1)
 
     this.el.control.patchValue(value.match(/^[+-]?((\d+((\.|\,)\d*)?)|((\.|\,)\d+))$/g))
-    //(value.replace(/^[+-]?((\d+(\.\d*)?)|(\.\d+))$/g, ''));
     }
     console.log(this.el.control.getRawValue() )
   }
